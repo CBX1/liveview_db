@@ -1,0 +1,38 @@
+<form phx-submit="pokemon_name_search">
+  <fieldset>
+    <label for="nameField">Pokemon Empire PBS</label>
+    <input type="text" name="pokemon_name" value="<%= @pokemon_name %>"
+    placeholder="Ex. A-Rattata"
+    autofocus autocomplete="off" />
+    <input class="button-primary" type="submit" value="Search">
+  </fieldset>
+</form>
+<%= unless @pokemons != [] do %>
+<h2> Enter Pokemon Name </h2>
+<% end %>
+<%= unless @pokemons == [] do %>
+  <h2>Search Results</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Airport Code</th>
+        <th>Type 1</th>
+        <th>Type 2 </th>
+        <th>Location </th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for airport <- @pokemons do %>
+      <tr>
+        <td><%= airport |> hd %></td>
+        <td><%= airport |> tl |> hd %></td>
+        <td><%= airport |> tl |> tl |> hd %> </td>
+        <td><%= inspect airport |> tl |> tl |> tl |> hd %> </td>
+
+
+
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
