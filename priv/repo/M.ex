@@ -1,5 +1,6 @@
 defmodule M do
   alias PokemonDb.Repo
+  alias PokemonDb.Location
   def on do
     IO.puts "test"
   end
@@ -11,9 +12,17 @@ defmodule M do
 
   def main(string) do
      o = string |> String.split("\n")
-   a = %PokemonDb.Location{name: substr(o|> tl |>hd) , encounterChance: encWhere(o |> tl |> tl |> hd |> String.split(",")), encounterPresent: encPresent(o |> tl |> tl |> tl |> Enum.map(fn string -> lol(string) end))}
-      Repo.insert!(a)
-    a
+   changeset = Location.changeset(%Location{name: substr(o|> tl |>hd) , encounterChance: encWhere(o |> tl |> tl |> hd |> String.split(",")), encounterPresent: encPresent(o |> tl |> tl |> tl |> Enum.map(fn string -> lol(string) end))})
+    if changeset.valid? do
+        case Repo.insert(changeset) do
+            {:ok, location} -> IO.puts("Record for #{location.name} was created.")
+            {:error, changeset} -> IO.inspect(changeset.errors)
+        end
+        changeset
+    else
+
+    end
+
 end
 
   def lol(string) do
@@ -158,14 +167,16 @@ end
 
 defmodule Main do
     alias PokemonDb.Repo
-  alias PokemonDb.BaseStat
-  alias PokemonDb.Move
+    import Ecto.Changeset
+    alias PokemonDb.BaseStat
+    alias PokemonDb.Move
+    alias PokemonDb.Pokemon
   def read do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
       newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
        tms = Tm.read
-      Enum.map(newmap, fn str -> parse(str,tms) end)
-    #   newmap |> hd |> parse(tms)
+    #   Enum.map(newmap, fn str -> parse(str,tms) end)
+      newmap |> hd |> parse(tms)
 
 end
 
@@ -254,17 +265,34 @@ end
             # {"Sp. ATK", "60"},
             # {"Sp. DEF", "80"}
         }
-        a = %PokemonDb.Pokemon{:p_num => pnum  ,
-         :name => pname, :type1 => ptype1,
-           :type2 => ptype2, :growth_rate => growth_rate,
-              :regular_abilities => regular_abilities,
-              :hidden_ability => hidden_ability,
-               :description => pokedex_entry,  :evolution => evolution,
-            :base_stats => base_stats,
-              :moves => natural_moves
-            }
-            Repo.insert!(a)
-         {a, data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))}
+        changeset_bst = BaseStat.changeset(base_stats)
+        if changeset_bst.valid? do
+            changeset_pokemon = Pokemon.changeset(%PokemonDb.Pokemon{:p_num => pnum  ,
+            :name => pname, :type1 => ptype1,
+              :type2 => ptype2, :growth_rate => growth_rate,
+                 :regular_abilities => regular_abilities,
+                 :hidden_ability => hidden_ability,
+                  :description => pokedex_entry,  :evolution => evolution,
+               })
+            if changeset_pokemon.valid? do
+               changeset_pokemon= changeset_pokemon
+                    |> put_assoc(:moves, natural_moves)
+                    |> put_assoc(:base_stats, base_stats)
+               case Repo.insert(changeset_pokemon) do
+                {:ok, pokemon} ->
+                    IO.puts("Record for #{pokemon.name} was created.")
+                    # %{number: pnu, name: data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))}
+                {:error, changeset} ->
+                    IO.inspect(changeset.errors)
+               end
+            else
+                {:error, IO.inspect(changeset_pokemon.errors)}
+            end
+
+
+        else
+            {:error,  IO.inspect(changeset_bst.errors)}
+        end
 
 
   end
@@ -302,9 +330,13 @@ end
   def return_move_list(move_list) do
      data =  move_list |> hd
      learn_method = data |> Map.keys |> hd
-     [%Move{learn: learn_method |> Atom.to_string, name: data |> Map.fetch(learn_method) |> elem(1)}] ++
-     return_move_list(move_list |> tl)
-
+     changeset = Move.changeset(%Move{learn: learn_method |> Atom.to_string, name: data |> Map.fetch(learn_method) |> elem(1)})
+     if changeset.valid? do
+        [changeset] ++ return_move_list(move_list |> tl)
+     else
+        {:error, IO.inspect(changeset.errors)}
+        [] ++ return_move_list(move_list |> tl)
+     end
   end
 
   def check(ddd) do
