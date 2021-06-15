@@ -163,11 +163,13 @@ defmodule Main do
   def read do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
       newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
-      Enum.map(newmap, fn str -> parse(str) end)
+       tms = Tm.read
+      Enum.map(newmap, fn str -> parse(str,tms) end)
+    #   newmap |> hd |> parse(tms)
 
 end
 
-  def parse(da) do
+  def parse(da,tm_list) do #This is a really long function that just parses a given text blob of a Pokemon
       data = Enum.filter(da, fn string -> string != "" end)
       pnum = data |> hd |> String.slice(1..( String.length(data |> hd) - 2) ) |> Integer.parse |> elem(0)
       # IO.puts "ncumber ok"
@@ -211,7 +213,9 @@ end
             {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
             IO.puts "#{pname}"
             egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
-        natural_moves = all_moves ++ egg_moves_schema
+          unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
+   String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
+        natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves
        {:ok, ncontent} = Map.fetch(nparse, :newestdata)
        # IO.puts "Egg Moves ok"
        egg_groups = ncontent |> hd |> String.slice(14..String.length(ncontent |> hd)) |> String.split(",")
@@ -259,7 +263,7 @@ end
             :base_stats => base_stats,
               :moves => natural_moves
             }
-           Repo.insert!(a)
+            Repo.insert!(a)
          {a, data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))}
 
 
@@ -270,6 +274,37 @@ end
    else
     string |> tl |> hd
    end
+  end
+
+
+  def search_tm_list(name, tm_list) do
+      data_tm = tm_list |> Map.fetch(:tm)
+ {:ok, tms} = data_tm
+   tms_list = tms  |>  Enum.filter(fn str -> check_map(str,name) end)
+    {:ok, data_hm} = tm_list |> Map.fetch(:hm)
+    hm_list = data_hm  |>  Enum.filter(fn str -> check_map(str,name) end)
+    {:ok, move_tutor_data} =tm_list |> Map.fetch(:move)
+    move_tutor_list = move_tutor_data  |>  Enum.filter(fn str -> check_map(str,name) end)
+
+    return_move_list(tms_list ++ hm_list ++ move_tutor_list)
+  end
+
+
+   def check_map(data, str) do
+    {:ok, data_str} = Map.fetch(data,:pokemon)
+    data_str =~ str
+
+  end
+  def return_move_list([]) do
+    []
+  end
+
+  def return_move_list(move_list) do
+     data =  move_list |> hd
+     learn_method = data |> Map.keys |> hd
+     [%Move{learn: learn_method |> Atom.to_string, name: data |> Map.fetch(learn_method) |> elem(1)}] ++
+     return_move_list(move_list |> tl)
+
   end
 
   def check(ddd) do
@@ -345,4 +380,36 @@ end
   def is_item(data) do
       data =~ "WildItemCommon" || data =~ "WildItemUncommon" || data =~ "WildItemRare"
   end
+end
+
+
+
+defmodule Tm do
+    def read do
+        {:ok, contents} = File.read("assets/static/tm.txt")
+        array_generalform = contents |> String.split("#================================================================") |> Enum.filter(fn str -> str != "" end)
+       tm_list= array_generalform |> tl |> hd |> String.split("\n") |> Enum.filter(fn str -> str != "" end) |> create_list("tm")
+         hm_list = array_generalform |> tl |> tl |> tl |> hd |> String.split("\n") |> Enum.filter(fn str -> str != "" end) |> create_list("hm")
+        move_tutors = array_generalform |> tl |> tl |> tl |> tl |> tl |> hd |> String.split("\n") |> Enum.filter(fn str -> str != "" end) |> create_list("tutor")
+       list_learn= %{tm: tm_list, hm: hm_list, move: move_tutors}
+       end
+
+    def create_list([],_) do
+        []
+    end
+    def create_list(content,type) do
+        cond do
+            type =~ "tm" ->
+                [%{"Learns via TM": content |> hd |> String.slice(1..(String.length(content |> hd) -2) ), pokemon: content |> tl |> hd}]
+                ++ create_list(content |> tl |> tl,type)
+            type =~ "hm" ->
+                [%{"Learns via HM": content |> hd |> String.slice(2..(String.length(content |> hd) -2) ), pokemon: content |> tl |> hd |> String.slice(1..(String.length(content |> tl |> hd)))}]
+                ++ create_list(content |> tl |> tl,type)
+            type =~ "tutor" ->
+                [%{"Learns via Move Tutor": content |> hd |> String.slice(1..(String.length(content |> hd) -2) ), pokemon: content |> tl |> hd}]
+                ++ create_list(content |> tl |> tl,type)
+        end
+        #The names of the tms start with L to normalize data manipulation for each array of maps
+
+    end
 end

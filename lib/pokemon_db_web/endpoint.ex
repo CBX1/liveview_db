@@ -24,7 +24,7 @@ defmodule PokemonDbWeb.Endpoint do
     at: "/",
     from: :pokemon_db,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico location.txt pokemon.txt robots.txt)
+    only: ~w(css fonts images js favicon.ico location.txt pokemon.txt tm.txt robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
