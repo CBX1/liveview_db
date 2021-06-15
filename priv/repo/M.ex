@@ -213,9 +213,9 @@ end
             {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
             IO.puts "#{pname}"
             egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
-          unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
-   String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
-        natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves
+#           unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
+#    String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
+        natural_moves = all_moves ++ egg_moves_schema #++ unnatural_moves
        {:ok, ncontent} = Map.fetch(nparse, :newestdata)
        # IO.puts "Egg Moves ok"
        egg_groups = ncontent |> hd |> String.slice(14..String.length(ncontent |> hd)) |> String.split(",")
