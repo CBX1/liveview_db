@@ -5,6 +5,7 @@ defmodule PokemonDb.Repo.Migrations.AddIndexs do
   def change do
     create index("pokemons", :name)
     create index("locations", :name, unique: true)
+   create index("pokemons_locations", [:pokemon_id, :location_id], unique: true)
   end
 
 

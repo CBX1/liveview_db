@@ -15,12 +15,16 @@ defmodule M do
    changeset = Location.changeset(%Location{name: substr(o|> tl |>hd) , encounterChance: encWhere(o |> tl |> tl |> hd |> String.split(",")), encounterPresent: encPresent(o |> tl |> tl |> tl |> Enum.map(fn string -> lol(string) end))})
     if changeset.valid? do
         case Repo.insert(changeset) do
-            {:ok, location} -> IO.puts("Record for #{location.name} was created.")
-            {:error, changeset} -> IO.inspect(changeset.errors)
+            {:ok, location} ->
+                IO.puts("Record for #{location.name} was created.")
+                changeset.data.name
+            {:error, changeset} ->
+                IO.inspect(changeset.errors)
+                changeset.data.name
         end
-        changeset
-    else
 
+    else
+        IO.inspect(changeset.errors)
     end
 
 end
@@ -75,14 +79,12 @@ defmodule C do
       {:ok, contents} = File.read("assets/static/location.txt")
       newnewmap = contents |> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") |> check end)
       b = newnewmap |> Enum.map(fn string -> string |> comma_substr |> Enum.uniq end) |>  List.flatten() |> Enum.map(fn string -> {string, pres(string,newnewmap)} end) |> Enum.uniq()
-      a= M.read
-      c = Main.read
-        # {:ok, vv}=
-        b |> hd |> addPok(c)
-        # vv.rows |> hd |> hd
-        # b |> tl |>  hd |> addLoc(a)
-    d = Enum.map(b, fn string -> {addPok(string,c), addLoc(string,a)} end)
-    d |> Enum.map(fn s -> zipV(s |> elem(0), s |> elem(1)) end)
+      # Returns tuple in the form of {Name, [Location1,Location2,...]}
+      M.read
+      array_of_names = Main.read
+     {b |> hd |> addPok(array_of_names),b |> tl |> hd |> get_location}
+  d = Enum.map(b, fn string -> {addPok(string,array_of_names), get_location(string)} end)
+d |> Enum.map(fn s -> zipV(s |> elem(0), s |> elem(1)) end)
 
     end
 
@@ -90,31 +92,31 @@ defmodule C do
     end
 
     def zipV(z,list) do
-         Repo.insert!(%PokemonLocation{pokemon_id: z, location_id: list |> hd })
+        changeset = PokemonLocation.changeset(%PokemonLocation{pokemon_id: z, location_id: list |> hd })
+        if changeset.valid? do
+            case Repo.insert(changeset) do
+                {:ok, pokemon_location} -> IO.puts("Record for { #{pokemon_location.pokemon_id}, #{pokemon_location.location_id} } was created.")
+                {:error, changeset} -> IO.inspect(changeset.errors)
+            end
+        else
+            IO.inspect(changeset.errors)
+        end
         zipV(z, list |> tl)
     end
 
-  def addPok(string,bv) do
-        b =  string |> elem(0)
-        d = Enum.filter(bv, fn {a,c} -> c == b end) |> hd
-        {e,_} = d
-      if e.name =~ "'" do
-        {:ok, data} = Repo.query("SELECT * from pokemons WHERE NAME::text LIKE '%Farfetch%'")
-        data.rows |> hd |> hd
-      else
-        {:ok, data} = Repo.query("SELECT * FROM pokemons WHERE name='#{e.name}'")
-        data.rows |> hd |> hd
-      end
+  def addPok(string,array_of_names) do
+         b =  string |> elem(0)
+         Enum.filter(array_of_names,fn {_,c} -> c == b end) |> hd |> elem(0)
 
 
     end
 
-  def addLoc(string,a) do
+  def get_location(string) do
     b = string |> elem(1)
-    Enum.map(b, fn string1 -> changeLoc(string1,a) end)
+    Enum.map(b, fn string1 -> changeLoc(string1) end)
   end
 
-  def changeLoc(string, a) do
+  def changeLoc(string) do
      {:ok, data} = Repo.query("SELECT * FROM locations WHERE name='#{string}'")
      data.rows |> hd |> hd
   end
@@ -175,81 +177,74 @@ defmodule Main do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
       newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
        tms = Tm.read
-    #   Enum.map(newmap, fn str -> parse(str,tms) end)
-      newmap |> hd |> parse(tms)
+      Enum.map(newmap, fn str -> parse(str,tms) end)
+    #   newmap |> hd |> parse(tms)
 
 end
 
-  def parse(da,tm_list) do #This is a really long function that just parses a given text blob of a Pokemon
-      data = Enum.filter(da, fn string -> string != "" end)
-      pnum = data |> hd |> String.slice(1..( String.length(data |> hd) - 2) ) |> Integer.parse |> elem(0)
-      # IO.puts "ncumber ok"
-       pname = data |> tl |> hd |> String.slice(5, String.length(data |> tl |> hd))
-      #  # IO.puts "name ok"
-      #  # IO.puts "currently #{pname}"
-       ptype1 = data |> tl |> tl |> tl |> hd |> String.slice(6, String.length(data |> tl |> tl |> hd))
-      #  # IO.puts "type 1 ok"
-       v = data |> tl |> tl |> tl |> tl |> hd
-        newinfo = parser2(v,data)
-       ndata = Map.fetch(newinfo, :newdata)
-       {:ok, content} = ndata
-       {:ok, ptype2} = Map.fetch(newinfo, :type2)
-      #  # IO.puts "type 2 ok"
-       vv =["HP", "ATK", "DEF", "SPEED", "Sp. ATK", "Sp. DEF"]
-      ase_stats = vv |>
-       Enum.zip(content |> hd |> String.slice(10..String.length(content |> hd))
-       |> String.split(","))
+    def parse(da,tm_list) do #This is a really long function that just parses a given text blob of a Pokemon
+        data = Enum.filter(da, fn string -> string != "" end)
+        pnum = data |> hd |> String.slice(1..( String.length(data |> hd) - 2) ) |> Integer.parse |> elem(0)
+        pname = data |> tl |> hd |> String.slice(5, String.length(data |> tl |> hd))
+        ptype1 = data |> tl |> tl |> tl |> hd |> String.slice(6, String.length(data |> tl |> tl |> hd))
+        newinfo = parser2(data |> tl |> tl |> tl |> tl |> hd,data)
+        ndata = Map.fetch(newinfo, :newdata)
+        {:ok, content} = ndata
+        {:ok, ptype2} = Map.fetch(newinfo, :type2)
+        vv =["HP", "ATK", "DEF", "SPEED", "Sp. ATK", "Sp. DEF"]
+        ase_stats = vv |>
+        Enum.zip(content |> hd |> String.slice(10..String.length(content |> hd))
+        |> String.split(","))
 
-      # IO.puts "Base stats ok"
 
       #  # IO.puts "Gender Rate ok"
        growth_rate = content |> tl |> tl |> hd |> String.slice(11..String.length( content |> tl |> tl |> hd))
       # # IO.puts "Growth Rate ok"
-       base_exp = content |> tl |> tl |> tl |> hd |> String.slice(8..String.length(content |> tl |> tl |> tl |> hd))
+
       # # IO.puts "Base Exp ok"
-       effort_points = vv |> Enum.zip(content |> tl  |> tl |> tl |> tl |> hd |> String.slice(13..String.length(content |> tl  |> tl |> tl |> tl |> hd)) |> String.split(",")) |> Map.new()
+
       #  # IO.puts "Effort points OK"
-       rarity = content |> tl  |> tl |> tl |> tl |> tl |> hd |> String.slice(9..String.length(content |> tl  |> tl |> tl |> tl |> tl |> hd))
+
       # # IO.puts "Rarity OK"
-       happiness = content |> tl  |> tl |> tl |> tl |> tl |> tl |> hd |> String.slice(10.. String.length(content |> tl  |> tl |> tl |> tl |> tl |> hd))
+
       # IO.puts "happy ok"
        regular_abilities =  content |> tl  |> tl |> tl |> tl |> tl |> tl |> tl |> hd |> String.slice(10..String.length(content |> tl  |> tl |> tl |> tl |> tl |> tl |> tl |> hd)) |> String.split(",")
       # IO.puts "regular abilities ok"
       ond = content |> tl  |> tl |> tl |> tl |> tl |> tl |> tl |> tl |> conjure()
       {:ok, hidden_ability} = Map.fetch(ond, :hidden)
       {:ok, cnn} = Map.fetch(ond, :data)
-       # IO.puts "hidden abilities ok"
         all_moves = cnn |> hd |> String.slice(6..String.length(cnn |> hd)) |> String.split(",") |>   parese(pnum, "Learns at Level ")
             nparse = cnn |> tl |> eggMoves()
             {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
-            IO.puts "#{pname}"
             egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
-#           unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
+#           unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |> if used in future will need changeset addition
 #    String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
         natural_moves = all_moves ++ egg_moves_schema # ++ unnatural_moves
        {:ok, ncontent} = Map.fetch(nparse, :newestdata)
-       # IO.puts "Egg Moves ok"
-       egg_groups = ncontent |> hd |> String.slice(14..String.length(ncontent |> hd)) |> String.split(",")
-       # IO.puts "Egg Groups ok"
-       hatch = ncontent |> tl |> hd |> String.slice(13..String.length(content |> tl |> hd))
-      # IO.puts "steps to hatch ok"
+
       eee =par(ncontent |> tl  |> tl |> tl |> tl |> tl |> tl |> tl)
        pokedex_entry = eee |> String.slice(8..String.length(eee))
-      # IO.puts "pxdx entry"
+
 
        won = ncontent |> tl  |> tl |> tl |> tl |> tl |> tl |> tl |> tl |> tl |> item_rarity_Check()
-       {:ok, wild_common} = Map.fetch(won, :item)
+    #    {:ok, wild_common} = Map.fetch(won, :item)
+    #    {:ok, wild_rare} = Map.fetch(adf, :item)
+    #    {:ok, wild_uncommon} = Map.fetch(nnndata, :item)
+    #    effort_points = vv |> Enum.zip(content |> tl  |> tl |> tl |> tl |> hd |> String.slice(13..String.length(content |> tl  |> tl |> tl |> tl |> hd)) |> String.split(",")) |> Map.new()
+    #    hatch = ncontent |> tl |> hd |> String.slice(13..String.length(content |> tl |> hd))
+    #    rarity = content |> tl  |> tl |> tl |> tl |> tl |> hd |> String.slice(9..String.length(content |> tl  |> tl |> tl |> tl |> tl |> hd))
+    #    egg_groups = ncontent |> hd |> String.slice(14..String.length(ncontent |> hd)) |> String.split(",")
+    #    base_exp = content |> tl |> tl |> tl |> hd |> String.slice(8..String.length(content |> tl |> tl |> tl |> hd))
+    #      happiness = content |> tl  |> tl |> tl |> tl |> tl |> tl |> hd |> String.slice(10.. String.length(content |> tl  |> tl |> tl |> tl |> tl |> hd))
+    #   Extra data I parsed that I'm not including now but could be useful later
        {:ok, nndata} = Map.fetch(won, :ndata)
        nnndata = nndata |> item_rarity_Check
-       {:ok, wild_uncommon} = Map.fetch(nnndata, :item)
+
        {:ok, weGo} = Map.fetch(nnndata, :ndata)
        adf = weGo |> item_rarity_Check
-       {:ok, wild_rare} = Map.fetch(adf, :item)
-       # IO.puts "Items Discovered"
        {:ok, ddd} = Map.fetch(adf, :ndata)
        df = ddd |> check() |>check() |> tl |> tl |> hd
        evolution = df  |> String.split("=")  |> tl |> hd |> String.split(",") |>  convert()
-        # IO.puts "evolution ok"
         base_stats = %PokemonDb.BaseStat{
             HP: ase_stats |> hd |> elem(1) |> Integer.parse |> elem(0),
             ATK: ase_stats |> tl |> hd |> elem(1) |> Integer.parse |> elem(0),
@@ -278,10 +273,12 @@ end
                changeset_pokemon= changeset_pokemon
                     |> put_assoc(:moves, natural_moves)
                     |> put_assoc(:base_stats, base_stats)
-               case Repo.insert(changeset_pokemon) do
+
+                   case Repo.insert(changeset_pokemon) do
                 {:ok, pokemon} ->
                     IO.puts("Record for #{pokemon.name} was created.")
-                    # %{number: pnu, name: data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))}
+                    {changeset_pokemon.data.p_num,  data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))}
+                    # Tuple for many-many relation
                 {:error, changeset} ->
                     IO.inspect(changeset.errors)
                end
@@ -423,7 +420,7 @@ defmodule Tm do
        tm_list= array_generalform |> tl |> hd |> String.split("\n") |> Enum.filter(fn str -> str != "" end) |> create_list("tm")
          hm_list = array_generalform |> tl |> tl |> tl |> hd |> String.split("\n") |> Enum.filter(fn str -> str != "" end) |> create_list("hm")
         move_tutors = array_generalform |> tl |> tl |> tl |> tl |> tl |> hd |> String.split("\n") |> Enum.filter(fn str -> str != "" end) |> create_list("tutor")
-       list_learn= %{tm: tm_list, hm: hm_list, move: move_tutors}
+       %{tm: tm_list, hm: hm_list, move: move_tutors}
        end
 
     def create_list([],_) do
