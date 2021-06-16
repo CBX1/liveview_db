@@ -10,7 +10,7 @@ defmodule PokemonDb.Repo.Migrations.CreatePokemons do
       add :type2, :string
       add :hidden_ability, :string
       add :regular_abilities, {:array, :string}
-      add :evolution, {:map, :string}
+      add :evolution, {:array, {:map, :string}}
       add :growth_rate, :string
     end
 

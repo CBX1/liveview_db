@@ -9,7 +9,7 @@ defmodule PokemonDb.Pokemon do
       field :type2, :string
       field :hidden_ability, :string
       field :regular_abilities, {:array, :string}
-      field :evolution, {:map, :string}
+      field :evolution, {:array, {:map, :string}}
       field :growth_rate, :string
       has_many :moves, PokemonDb.Move
       many_to_many :location, PokemonDb.Location, join_through: "pokemons_locations"

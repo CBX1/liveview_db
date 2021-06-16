@@ -177,8 +177,8 @@ defmodule Main do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
       newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
        tms = Tm.read
-      Enum.map(newmap, fn str -> parse(str,tms) end)
-    #   newmap |> hd |> parse(tms)
+       Enum.map(newmap, fn str -> parse(str,tms) end)
+    #    newmap |> hd |> parse(tms)
 
 end
 
@@ -217,9 +217,9 @@ end
             nparse = cnn |> tl |> eggMoves()
             {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
             egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
-#           unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |> if used in future will need changeset addition
-#    String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
-        natural_moves = all_moves ++ egg_moves_schema # ++ unnatural_moves
+          unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
+   String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
+         natural_moves = all_moves ++ unnatural_moves
        {:ok, ncontent} = Map.fetch(nparse, :newestdata)
 
       eee =par(ncontent |> tl  |> tl |> tl |> tl |> tl |> tl |> tl)
@@ -327,13 +327,9 @@ end
   def return_move_list(move_list) do
      data =  move_list |> hd
      learn_method = data |> Map.keys |> hd
-     changeset = Move.changeset(%Move{learn: learn_method |> Atom.to_string, name: data |> Map.fetch(learn_method) |> elem(1)})
-     if changeset.valid? do
+     changeset = %Move{learn: learn_method |> Atom.to_string, name: data |> Map.fetch(learn_method) |> elem(1)}
         [changeset] ++ return_move_list(move_list |> tl)
-     else
-        {:error, IO.inspect(changeset.errors)}
-        [] ++ return_move_list(move_list |> tl)
-     end
+
   end
 
   def check(ddd) do

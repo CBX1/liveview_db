@@ -1,48 +1,54 @@
 
 
-<form phx-change="pokemon_name_search">
-  <fieldset>
+<%= f = form_for @pokemon_data, "#", [phx_change: :pokemon_new] %>
     <label for="nameField">Pokemon Empire PBS</label>
-    <input type="text" name="pokemon_name" value="<%= @pokemon_name %>"
-    placeholder="Ex. A-Rattata"
-    autofocus autocomplete="off" />
-  </fieldset>
+    <%= text_input f, :name %>
+
+    <%= select f, :move, @moves, prompt: "" %>
+
+    <%= select f, :ability, @abilities, prompt: "" %>
+
+     <%= select f, :growth_rate, @growth_rate, prompt: "" %>
+
+     <%= select f, :location, @location, prompt: "" %>
+
+     <%= select f, :type1, @types, prompt: "" %>
+
+      <%= select f, :type2, @types, prompt: "" %>
+
+<button type="button" phx-click="reset"> Reset </button>
+
+
+
 </form>
 
+ <img padding-bottom="30px" height="100px" src="/images/Battlers/1.png" alt="<>" />
 
 <%= unless @pokemons != [] do %>
 <h2> Enter Pokemon Name </h2>
 <% end %>
 <%= unless @pokemons == [] do %>
-  <h2>Search Results</h2>
-  <table>
+  <table size="fixed">
     <thead>
       <tr>
+        <th> </th>
         <th>Pokemon Name</th>
         <th>Type 1</th>
         <th>Type 2 </th>
-        <th>Growth Rate </th>
-        <th>Base Stats </th>
-        <th> Moves </th>
-        <th>Location </th>
       </tr>
     </thead>
     <tbody>
       <%= for pokemon <- @pokemons do %>
+
       <tr>
-        <td><%= pokemon |> hd %></td>
-        <td><%= pokemon |> tl |> hd %></td>
-        <td><%= pokemon |> tl |> tl |> hd %> </td>
-        <td><%= pokemon |> tl |> tl |> tl |> hd %></td>
-        <td><button type="button">View Base Stats</button> </td>
-        <td><button type="button">View Moves</button> </td>
-        <td><button type="button">View Location</button> </td>
-
-
-
-
+        <td> 	<img loading="lazy" padding-bottom="30px" height="100px" src="/images/Battlers/<%= pokemon.id %>.png" alt="No Image Available" /></td> </td>
+        <td><%=  pokemon.name %></td>
+        <td><%= pokemon.type1 %> </td>
+        <td><%= pokemon.type2 %> </td>
       </tr>
+
       <% end %>
     </tbody>
   </table>
+
 <% end %>
