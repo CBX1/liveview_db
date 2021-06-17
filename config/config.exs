@@ -1,10 +1,3 @@
-# This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
-#
-# This configuration file is loaded before any dependency and
-# is restricted to this project.
-
-# General application configuration
 use Mix.Config
 
 config :pokemon_db,
@@ -12,13 +5,7 @@ config :pokemon_db,
 
 # Configures the endpoint
 config :pokemon_db, PokemonDbWeb.Endpoint,
-  url: [host: "empirepbs.tk", port: 80],
-  check_origin: [
-    "//empirepbs.tk",
-    "//www.empirepbs.tk",
-    "//	empirepbs.tk.gigalixirdns.com/"
-  ],
-  cache_static_manifest: "priv/static/cache_manifest.json",
+  url: [host: "localhost"],
   secret_key_base: "WOmBjeenALCoQa9o8Vi01UD9MB4qtIWrymXD2a9jddnc00yg20uiXd6UA35OxRjz",
   render_errors: [view: PokemonDbWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: PokemonDb.PubSub,
