@@ -134,7 +134,7 @@ def set_q(query,params,check) do
       end
     check == "type2" ->
       if params["type2"] != nil do
-          from(p in query, where: ilike(p.type1g, ^"%#{params["type2"]}%") or ilike(p.type2, ^"%#{params["type2"]}%") )
+          from(p in query, where: ilike(p.type1, ^"%#{params["type2"]}%") or ilike(p.type2, ^"%#{params["type2"]}%") )
       else
         query
       end
