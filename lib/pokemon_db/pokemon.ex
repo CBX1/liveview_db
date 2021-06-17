@@ -19,7 +19,7 @@ defmodule PokemonDb.Pokemon do
 
 
 
-    def changeset(pokemon, params \\ %{}) do
+    def chpngeset(pokemon, params \\ %{}) do
       pokemon
       |> change(params)
       |> validate_required([:name,:p_num,:type1,:regular_abilities,:description, :internal_name])
