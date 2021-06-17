@@ -23,6 +23,7 @@ defmodule PokemonDb.Pokemon do
       pokemon
       |> change(params)
       |> validate_required([:name,:p_num,:type1,:regular_abilities,:description, :internal_name])
+      |> unique_constraint(:internal_name)
 
 
     end

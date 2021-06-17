@@ -12,7 +12,13 @@ config :pokemon_db,
 
 # Configures the endpoint
 config :pokemon_db, PokemonDbWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "empirepbs.tk", port: 80],
+  check_origin: [
+    "//empirepbs.tk",
+    "//www.empirepbs.tk",
+    "//empirepbs.gigalixirapp.com/"
+  ],
+  cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: "WOmBjeenALCoQa9o8Vi01UD9MB4qtIWrymXD2a9jddnc00yg20uiXd6UA35OxRjz",
   render_errors: [view: PokemonDbWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: PokemonDb.PubSub,

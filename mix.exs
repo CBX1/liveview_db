@@ -1,6 +1,6 @@
 defmodule PokemonDb.MixProject do
   use Mix.Project
-
+  
   def project do
     [
       app: :pokemon_db,

@@ -1,82 +1,134 @@
-<%# <p style="color:blue;cursor:pointer;float:left" phx-click="home">  <- Go Back </p> <br> %>
+<div><button type="button" class="btnm" style="background-color:#ff8e3c; border-color:#ff8e3c" phx-click="home"> Go Back </button> <br> </div>
 <div style="background-color:#fffffe">
   <div style="text-align:left">
-    <h1 > <%= @main_data.name %> </h1>
-    <img  style="border: 5px solid #555;" height="200px" src="/images/Battlers/<%= @main_data.id %>.png" alt="No Image Available" /> </div>
+    <h1 style="color:#0d0d0d" > <%= @main_data.name %> </h1>
+
+    <img  style="border: 5px solid #0d0d0d;background-color:#eff0f3" height="200px" src="/images/Battlers/<%= @main_data.id %>.png" alt="No Image Available" /> </div>
     <h1 style="color:white"> </h1>
-    <div style="width:200px;float:left;margin-right:20px">
-      <div class="<%= @main_data.type1 %> display_table_type">
-         <%= @main_data.type1 %>
+    <div>
+      <div style="width:200px;float:left;margin-right:20px;margin-top:10px">
+        <div class="<%= @main_data.type1 %> display_table_type">
+          <%= @main_data.type1 %>
+        </div>
+      </div>
+      <div style="width:200px;float:left;margin-right:20px;margin-top:9px" >
+        <div class="<%= @main_data.type2 %> display_table_type" >
+          <%= @main_data.type2 %>
+        </div>
       </div>
     </div>
-    <div style="width:200px;float:left" >
-      <div class="<%= @main_data.type2 %> display_table_type" >
-        <%= @main_data.type2 %>
-      </div>
+
+    <br style="clear:both;" /> <br>
+     <div style="background-color:#eff0f3;padding:20px">
+
+     <%= if @main_data.l != [nil] do %>
+     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Locations </label>
+     <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @main_data.l do %>
+        <%= if location == @main_data.l |> List.last do %>
+        <%= location %>
+        <%= else %>
+        <%= location %>,
+      <% end %>
+        <% end %>
+      <%= else %>
+      <label style="font-size:30px;color:#0d0d0d;"> Cannot be found in the wild </label>
+      <% end %>
+     </div>
+
+    <div style="background-color:#eff0f3;padding:20px;margin-top:20px">
+      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Abilities </label>
+      <table style="width:100%;background-color:#eff0f3;padding:10px" >
+        <thead>
+          <tr class="tetable">
+            <th>Type</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for ability <- @main_data.regular_abilities do %>
+            <tr class="tetable">
+              <td> Regular</td>
+                <td ><%= ability |> String.capitalize %></td>
+            </tr>
+          <% end %>
+          <%= if @main_data.hidden_ability != nil do %>
+          <tr class="tetable">
+            <td> Hidden </td>
+            <td> <%= @main_data.hidden_ability |> String.capitalize %> </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
-  <br style="clear:both;" /> <br>
-  <div>
-    <label> Abilities </label>
-    <table style="width:100%">
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for ability <- @main_data.regular_abilities do %>
-          <tr>
-            <td> Regular</td>
-              <td ><%= ability |> String.capitalize %></td>
+    <div style="margin-top:20px;background-color:#eff0f3;padding:20px">
+      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;margin-right:20px;"> Growth Rate </label>
+      <p style="text-indent:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.growth_rate %> </p>
+    </div>
+
+<div style="margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
+ <%= if @main_data.evolution != nil do %>
+    <div>
+      <label style="font-size:30px;color:#0d0d0d;padding:15px"> Evolutions </label>
+      <table style="width:100%;padding:20px">
+        <thead>
+          <tr class="tetable">
+            <th>Method</th>
+            <th style="text-align:center">Pokemon</th>
           </tr>
-        <% end %>
-        <tr>
-          <td> Hidden </td>
-          <td> <%= @main_data.hidden_ability |> String.capitalize %> </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <label> Growth Rate </label>
-  <p> <%= @main_data.growth_rate %> </p>
-  <label> Pokedex Entry </label>
-  <p> <%= @main_data.description %> </p>
-  <%= if @main_data.evolution != nil do %>
-  <div>
-    <label> Evolutions </label>
-    <table style="width:100%">
-      <thead>
-        <tr>
-          <th>Method</th>
-          <th style="text-align:center">Pokemon</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for pokemon <- @main_data.evolution do %>
-          <tr phx-click="test", phx-value-pname="<%= Map.fetch(pokemon,(pokemon |> Map.keys |> tl |> hd)) |> elem(1) %>">
-            <td> <%=  (pokemon |> Map.keys |> hd |> String.capitalize) <> " " <> (Map.fetch(pokemon,(Map.keys(pokemon) |> hd)) |> elem(1) |> String.capitalize)  %> </td>
-              <td style="text-align:center"><%= Map.fetch(pokemon,(pokemon |> Map.keys |> tl |> hd)) |> elem(1)  |> String.capitalize %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          <%= for pokemon <- @main_data.evolution do %>
+            <tr class="tetable"  phx-click="test", phx-value-pname="<%= Map.fetch(pokemon,(pokemon |> Map.keys |> tl |> hd)) |> elem(1) %>">
+              <td> <%=  (pokemon |> Map.keys |> hd |> String.capitalize) <> " " <> (Map.fetch(pokemon,(Map.keys(pokemon) |> hd)) |> elem(1) |> String.capitalize)  %> </td>
+                <td style="text-align:center"><%= Map.fetch(pokemon,(pokemon |> Map.keys |> tl |> hd)) |> elem(1)  |> String.capitalize %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <%= else %>
-    <p style="font-size:20px;"> <b>No Evolution</b> </p>
+    <label style="font-size:30px;padding:10px"> <b>No Evolution</b> </label>
   <%end %>
-  <div>
-    <label> Moves Learned via Level Up </label>
-    <table style="width:100%">
+</div>
+
+<div style="margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
+      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;padding-top:20px;padding-left:20px"> Pokedex Entry </label>
+      <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.description %> </p>
+
+</div>
+  <div class="container" style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
+  <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> Base Stats </label>
+  <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
+      <div class="column" style="text-indent:10px"><%= @main_data.hp %></div>
+      <div class="column" style="text-indent:10px"><%= @main_data.atk %></div>
+      <div class="column" style="text-indent:17px"><%= @main_data.def %></div>
+      <div class="column" style="text-indent:10px"><%= @main_data.spa %></div>
+      <div class="column" style="text-indent:10px"><%= @main_data.spd %> </div>
+      <div class="column" style="text-indent:15px"><%= @main_data.speed %></div>
+    </div>
+
+    <div class="row" style="font-size:18px;border-bottom: 4px;margin-top:5px">
+      <div class="column"  style="text-indent:8px">HP</div>
+      <div class="column">Attack</div>
+      <div class="column">Defense</div>
+      <div class="column">Special Attack </div>
+      <div class="column"> Special Defense </div>
+      <div class="column">Speed</div>
+    </div>
+  </div>
+  </div>
+  <div style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
+    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Moves Learned via Level Up </label>
+    <table style="width:100%;padding:20px">
       <thead>
-        <tr>
+        <tr class="tetable">
           <th>Name</th>
           <th style="text-align:center">Level</th>
         </tr>
       </thead>
       <tbody>
         <%= for pokemon <- (@main_data.moves |> Enum.filter(fn str -> (str |> elem(2) ) =~ "Level" end)) do %>
-          <tr>
+          <tr class="tetable">
             <td> <%= pokemon |> elem(1) |> String.capitalize %></td>
             <td style="text-align:center"> <%= (pokemon |> elem (2)) |> String.split(" ") |> List.last() %> </td>
           </tr>
@@ -84,21 +136,23 @@
       </tbody>
     </table>
   </div>
-  <div>
-    <label for="o"> Moves Learned via Breeding </label>
-    <table id="o" style="width:30%">
-    <thead>
-      <tr>
-        <th>Move</th>
-      </tr>
-      </thead>
-      <tbody>
-        <%= for pokemon <- (@main_data.moves |> Enum.filter(fn str -> ((str |> elem(2) ) =~ "Egg") end)) do %>
-          <tr>
-            <td> <%= pokemon |> elem(1) |> String.capitalize %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+ <div style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
+
+     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;" for="o"> Moves Learned via Breeding </label>
+      <table id="o" style="width:30%">
+      <thead>
+        <tr class="tetable">
+          <th>Move</th>
+        </tr>
+        </thead>
+        <tbody>
+          <%= for pokemon <- (@main_data.moves |> Enum.filter(fn str -> ((str |> elem(2) ) =~ "Egg") end)) do %>
+            <tr class="tetable">
+              <td> <%= pokemon |> elem(1) |> String.capitalize %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
 </div>

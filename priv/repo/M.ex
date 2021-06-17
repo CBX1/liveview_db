@@ -283,6 +283,7 @@ end
                     # Tuple for many-many relation
                 {:error, changeset} ->
                     IO.inspect(changeset.errors)
+                    {changeset_pokemon.data.p_num,  data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))}
                end
             else
                 {:error, IO.inspect(changeset_pokemon.errors)}
