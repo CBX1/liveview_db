@@ -17,6 +17,7 @@ defmodule PokemonDbWeb.Router do
   scope "/", PokemonDbWeb do
     pipe_through :browser
     live "/", SearchLive
+    live "/:pokemon", PokemonLive
   end
 
   # Other scopes may use custom stacks.

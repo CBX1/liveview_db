@@ -12,6 +12,7 @@ defmodule PokemonDb.Repo.Migrations.CreatePokemons do
       add :regular_abilities, {:array, :string}
       add :evolution, {:array, {:map, :string}}
       add :growth_rate, :string
+      add :internal_name, :string
     end
 
   end

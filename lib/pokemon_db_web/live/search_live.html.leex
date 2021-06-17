@@ -40,7 +40,7 @@
     <tbody>
       <%= for pokemon <- @pokemons do %>
 
-      <tr>
+      <tr phx-click="test" phx-value-pname="<%= pokemon.internal_name  %>">
         <td> 	<img loading="lazy" padding-bottom="30px" height="100px" src="/images/Battlers/<%= pokemon.id %>.png" alt="No Image Available" /></td> </td>
         <td><%=  pokemon.name %></td>
         <td><%= pokemon.type1 %> </td>

@@ -213,13 +213,14 @@ end
       ond = content |> tl  |> tl |> tl |> tl |> tl |> tl |> tl |> tl |> conjure()
       {:ok, hidden_ability} = Map.fetch(ond, :hidden)
       {:ok, cnn} = Map.fetch(ond, :data)
+      internal_name=  data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))
         all_moves = cnn |> hd |> String.slice(6..String.length(cnn |> hd)) |> String.split(",") |>   parese(pnum, "Learns at Level ")
             nparse = cnn |> tl |> eggMoves()
             {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
             egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
-          unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
-   String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
-         natural_moves = all_moves ++ unnatural_moves
+#           unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
+#    String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
+         natural_moves = all_moves ++ egg_moves_schema
        {:ok, ncontent} = Map.fetch(nparse, :newestdata)
 
       eee =par(ncontent |> tl  |> tl |> tl |> tl |> tl |> tl |> tl)
@@ -268,6 +269,7 @@ end
                  :regular_abilities => regular_abilities,
                  :hidden_ability => hidden_ability,
                   :description => pokedex_entry,  :evolution => evolution,
+                  :internal_name => internal_name
                })
             if changeset_pokemon.valid? do
                changeset_pokemon= changeset_pokemon

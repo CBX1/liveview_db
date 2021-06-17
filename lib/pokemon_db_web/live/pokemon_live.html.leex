@@ -1,0 +1,21 @@
+<p style="color:blue" phx-click="home">  <- Go Back </p>
+
+<h1> <%= @main_data.name %> </h1>
+<h2> <%= @main_data.type1 %> <%= @main_data.type2 %> </h1>
+<h3> <%= @main_data.description %> </h1>
+<h3> <%= @main_data.growth_rate %> </h1>
+<%= if @main_data.evolution != nil do %>
+<h4> <%= @main_data.evolution %> </h4>
+<%= else %>
+<h4> No evolution </h4>
+<%end %>
+<table>
+<thead>
+<tr> Move </tr>
+<tr> Method to Learn </tr>
+</thead>
+<tbody>
+<h4> <%= for move <- @main_data.moves do %>
+     <tr>   <%= move |> elem(1) %> <%= move |> elem(2) %> </tr> <br>
+
+    <% end %> </h4>

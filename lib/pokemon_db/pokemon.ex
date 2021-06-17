@@ -3,6 +3,7 @@ defmodule PokemonDb.Pokemon do
     import Ecto.Changeset
     schema "pokemons" do
       field :name, :string
+      field :internal_name, :string
       field :p_num, :integer
       field :description, :string
       field :type1, :string
@@ -21,7 +22,7 @@ defmodule PokemonDb.Pokemon do
     def changeset(pokemon, params \\ %{}) do
       pokemon
       |> change(params)
-      |> validate_required([:name,:p_num,:type1,:regular_abilities,:description])
+      |> validate_required([:name,:p_num,:type1,:regular_abilities,:description, :internal_name])
 
 
     end
