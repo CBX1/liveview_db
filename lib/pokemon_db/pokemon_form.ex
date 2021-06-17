@@ -13,8 +13,10 @@ defmodule PokemonDb.PokemonForm do
   end
 
   def changeset(pokemon_data, params \\ %{}) do
+    IO.inspect params
     pokemon_data
-      |> cast(params, [:name, :move, :ability, :growth_rate, :location, :type1, :type2])
+      |> cast(params, [:name, :move, :ability, :growth_rate, :location, :type1, :type2], empty_values: [])
+
   end
 
 end

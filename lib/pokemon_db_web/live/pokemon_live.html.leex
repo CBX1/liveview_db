@@ -1,21 +1,104 @@
-<p style="color:blue" phx-click="home">  <- Go Back </p>
-
-<h1> <%= @main_data.name %> </h1>
-<h2> <%= @main_data.type1 %> <%= @main_data.type2 %> </h1>
-<h3> <%= @main_data.description %> </h1>
-<h3> <%= @main_data.growth_rate %> </h1>
-<%= if @main_data.evolution != nil do %>
-<h4> <%= @main_data.evolution %> </h4>
-<%= else %>
-<h4> No evolution </h4>
-<%end %>
-<table>
-<thead>
-<tr> Move </tr>
-<tr> Method to Learn </tr>
-</thead>
-<tbody>
-<h4> <%= for move <- @main_data.moves do %>
-     <tr>   <%= move |> elem(1) %> <%= move |> elem(2) %> </tr> <br>
-
-    <% end %> </h4>
+<%# <p style="color:blue;cursor:pointer;float:left" phx-click="home">  <- Go Back </p> <br> %>
+<div style="background-color:#fffffe">
+  <div style="text-align:left">
+    <h1 > <%= @main_data.name %> </h1>
+    <img  style="border: 5px solid #555;" height="200px" src="/images/Battlers/<%= @main_data.id %>.png" alt="No Image Available" /> </div>
+    <h1 style="color:white"> </h1>
+    <div style="width:200px;float:left;margin-right:20px">
+      <div class="<%= @main_data.type1 %> display_table_type">
+         <%= @main_data.type1 %>
+      </div>
+    </div>
+    <div style="width:200px;float:left" >
+      <div class="<%= @main_data.type2 %> display_table_type" >
+        <%= @main_data.type2 %>
+      </div>
+    </div>
+  <br style="clear:both;" /> <br>
+  <div>
+    <label> Abilities </label>
+    <table style="width:100%">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for ability <- @main_data.regular_abilities do %>
+          <tr>
+            <td> Regular</td>
+              <td ><%= ability |> String.capitalize %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td> Hidden </td>
+          <td> <%= @main_data.hidden_ability |> String.capitalize %> </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <label> Growth Rate </label>
+  <p> <%= @main_data.growth_rate %> </p>
+  <label> Pokedex Entry </label>
+  <p> <%= @main_data.description %> </p>
+  <%= if @main_data.evolution != nil do %>
+  <div>
+    <label> Evolutions </label>
+    <table style="width:100%">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th style="text-align:center">Pokemon</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for pokemon <- @main_data.evolution do %>
+          <tr phx-click="test", phx-value-pname="<%= Map.fetch(pokemon,(pokemon |> Map.keys |> tl |> hd)) |> elem(1) %>">
+            <td> <%=  (pokemon |> Map.keys |> hd |> String.capitalize) <> " " <> (Map.fetch(pokemon,(Map.keys(pokemon) |> hd)) |> elem(1) |> String.capitalize)  %> </td>
+              <td style="text-align:center"><%= Map.fetch(pokemon,(pokemon |> Map.keys |> tl |> hd)) |> elem(1)  |> String.capitalize %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= else %>
+    <p style="font-size:20px;"> <b>No Evolution</b> </p>
+  <%end %>
+  <div>
+    <label> Moves Learned via Level Up </label>
+    <table style="width:100%">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th style="text-align:center">Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for pokemon <- (@main_data.moves |> Enum.filter(fn str -> (str |> elem(2) ) =~ "Level" end)) do %>
+          <tr>
+            <td> <%= pokemon |> elem(1) |> String.capitalize %></td>
+            <td style="text-align:center"> <%= (pokemon |> elem (2)) |> String.split(" ") |> List.last() %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <label for="o"> Moves Learned via Breeding </label>
+    <table id="o" style="width:30%">
+    <thead>
+      <tr>
+        <th>Move</th>
+      </tr>
+      </thead>
+      <tbody>
+        <%= for pokemon <- (@main_data.moves |> Enum.filter(fn str -> ((str |> elem(2) ) =~ "Egg") end)) do %>
+          <tr>
+            <td> <%= pokemon |> elem(1) |> String.capitalize %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

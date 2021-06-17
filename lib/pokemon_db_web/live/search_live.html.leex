@@ -1,40 +1,60 @@
 
-
+<div>
 <%= f = form_for @pokemon_data, "#", [phx_change: :pokemon_new] %>
+<section>
     <label for="nameField">Pokemon Empire PBS</label>
     <%= text_input f, :name %>
-
-    <%= select f, :move, @moves, prompt: "" %>
-
-    <%= select f, :ability, @abilities, prompt: "" %>
-
-     <%= select f, :growth_rate, @growth_rate, prompt: "" %>
-
-     <%= select f, :location, @location, prompt: "" %>
-
+    <div>
+    <button type="button" phx-click="adv_search" phx-value-bool="<%= @expand %>"> Advanced Search </button>
+    </div>
+    <%= unless !@expand do %>
+     <div style="float:left;margin-right:400px">
+    <label> Enter Type 1 </label>
      <%= select f, :type1, @types, prompt: "" %>
-
-      <%= select f, :type2, @types, prompt: "" %>
-
+     </div>
+      <div style="float:left;">
+    <label> Enter Type 2 </label>
+    <%= select f, :type2, @types, prompt: "" %>
+  </div>
+<div>
+<br style="clear:both;" />
+<div style="float:left;margin-right:322px">
+  <label> Enter Move </label>
+    <%= select f, :move, @moves, prompt: "" %>
+</div>
+  <div style="float:left;">
+  <label> Enter Ability </label>
+    <%= select f, :ability, @abilities, prompt: "" %>
+</div>
+<br style="clear:both;" />
+<div style="float:left;margin-right:370px">
+<label> Enter Growth Rate </label>
+     <%= select f, :growth_rate, @growth_rate, prompt: "" %>
+</div>
+     <div style="float:left">
+<label> Enter Location </label>
+     <%= select f, :location, @location, prompt: "" %>
+     </div>
+</section>
+<% end %>
+<br style="clear:both;" />
 <button type="button" phx-click="reset"> Reset </button>
-
 
 
 </form>
 
- <img padding-bottom="30px" height="100px" src="/images/Battlers/1.png" alt="<>" />
 
 <%= unless @pokemons != [] do %>
 <h2> Enter Pokemon Name </h2>
 <% end %>
 <%= unless @pokemons == [] do %>
-  <table size="fixed">
+  <table style="loading:lazy">
     <thead>
       <tr>
-        <th> </th>
+        <th style="color:white"> Picture</th>
         <th>Pokemon Name</th>
-        <th>Type 1</th>
-        <th>Type 2 </th>
+        <th style="text-align:center">Type 1</th>
+        <th style="text-align:center">Type 2 </th>
       </tr>
     </thead>
     <tbody>
@@ -42,9 +62,9 @@
 
       <tr phx-click="test" phx-value-pname="<%= pokemon.internal_name  %>">
         <td> 	<img loading="lazy" padding-bottom="30px" height="100px" src="/images/Battlers/<%= pokemon.id %>.png" alt="No Image Available" /></td> </td>
-        <td><%=  pokemon.name %></td>
-        <td><%= pokemon.type1 %> </td>
-        <td><%= pokemon.type2 %> </td>
+        <td ><%=  pokemon.name %></td>
+        <td> <div class="<%= pokemon.type1 %> display_table_type" > <%= pokemon.type1 %>  </div></td>
+        <td> <div class="<%= pokemon.type2 %> display_table_type"><%= pokemon.type2 %>  </div></td>
       </tr>
 
       <% end %>
@@ -52,3 +72,4 @@
   </table>
 
 <% end %>
+</div>

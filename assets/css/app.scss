@@ -6,7 +6,13 @@
 .phx-no-feedback .invalid-feedback {
   display: none;
 }
-
+.display_table_type{
+  border-radius: 30px;
+  font-size:20px;
+  color:white;
+  text-align:center;
+  
+}
 .phx-click-loading {
   opacity: 0.5;
   transition: opacity 1s ease-out;
@@ -87,4 +93,76 @@
   color: #a94442;
   display: block;
   margin: -1rem 0 2rem;
+}
+
+tr:hover {background-color:#f5f5f5;}
+
+.NORMAL{
+  background-color: #A8A77A;
+}
+.GRASS {
+  background-color:#7AC74C
+}
+.ICE {
+  background-color:#96D9D6
+}
+
+.BUG {
+  background-color: #A6B91A;
+}
+
+.ELECTRIC{
+  background-color: #F7D02C;
+}
+
+.DARK {
+  background-color: #705746;
+}
+
+.FAIRY {
+  background-color: #D685AD;
+}
+
+.FIGHTING{
+  background-color: #C22E28;
+}
+
+.GHOST {
+  background-color: #735797;
+}
+
+.FIRE {
+  background-color: #EE8130;
+}
+
+.WATER {
+  background-color: #6390F0;
+}
+
+.DRAGON {
+  background-color: #6F35FC;
+}
+
+.FLYING {
+  background-color: #A98FF3;
+}
+
+.GROUND {
+  background-color: #E2BF65;
+}
+
+.PSYCHIC {
+ background-color: #F95587
+}
+
+.STEEL {
+  background-color: #B7B7CE
+}
+
+.POISON{
+  background-color: #A33EA1
+}
+
+.ROCK {
+ background-color:#B6A136 
 }
