@@ -33,13 +33,13 @@ defmodule PokemonDbWeb.PokemonLive do
   end
 
   def handle_params(params, _uri, socket) do
-    IO.inspect params
+    # IO.inspect params
     var = params["pokemon"] |> String.upcase
     mm = from p in Pokemon, left_join: pl in PokemonLocation, on: pl.pokemon_id == p.id, left_join: l in Location,
     on: l.id == pl.location_id, select: [p, fragment("ARRAY_AGG(?)",l.name)], group_by: p.id, where: p.internal_name == ^var
 
     pokemons = Repo.all(mm)
-    IO.inspect pokemons
+    # IO.inspect pokemons
 
     # movs = (pokemons |> hd).moves |> Enum.flatten
     socket = socket |> assign(:main_data, pokemons |> hd |> hd) |> assign(:locations, pokemons |> hd |> tl |> hd) #|> assign(:moves, movs)
@@ -50,5 +50,5 @@ defmodule PokemonDbWeb.PokemonLive do
   def handle_event("test",%{"pname" => tes}, socket) do
     {:noreply,  push_redirect(socket, to: Routes.live_path(socket, PokemonDbWeb.PokemonLive, tes))}
   end
-  
+
 end
