@@ -60,7 +60,7 @@ config :pokemon_db, PokemonDbWeb.Endpoint,
   check_origin: [
     "//empirepbs.tk",
     "//www.empirepbs.tk",
-    "//empirepbs.gigalixirapp.com/"
+    "//http://sparkling-simplistic-neontetra.gigalixirapp.com/"
   ],
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
   server: true
