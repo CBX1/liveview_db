@@ -50,4 +50,5 @@ defmodule PokemonDbWeb.PokemonLive do
   def handle_event("test",%{"pname" => tes}, socket) do
     {:noreply,  push_redirect(socket, to: Routes.live_path(socket, PokemonDbWeb.PokemonLive, tes))}
   end
+  
 end
