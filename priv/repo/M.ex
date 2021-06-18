@@ -1,6 +1,8 @@
 defmodule M do
   alias PokemonDb.Repo
   alias PokemonDb.Location
+  alias PokemonDb.MoveList
+  import PokemonDb.MoveList
   def on do
     IO.puts "test"
   end
@@ -173,12 +175,15 @@ defmodule Main do
     alias PokemonDb.BaseStat
     alias PokemonDb.Move
     alias PokemonDb.Pokemon
+    alias PokemonDb.MoveList
+
+    import Ecto.Query
   def read do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
       newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
        tms = Tm.read
-        Enum.map(newmap, fn str -> parse(str,tms) end)
-    #    newmap |> hd |> parse(tms)
+         Enum.map(newmap, fn str -> parse(str,tms) end)
+        # newmap |> tl |> hd |> parse(tms)
 
 end
 
@@ -222,6 +227,7 @@ end
     String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
          natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves
        {:ok, ncontent} = Map.fetch(nparse, :newestdata)
+       natural_moves |> Enum.map(fn str -> add_Moves(str,pnum) end)
 
       eee =par(ncontent |> tl  |> tl |> tl |> tl |> tl |> tl |> tl)
        pokedex_entry = eee |> String.slice(8..String.length(eee))
@@ -286,6 +292,23 @@ end
 
 
   end
+
+  def add_Moves(str, pnum) do
+    {:ok, t} = Map.fetch(str, :name)
+    o = %PokemonDb.MoveList{name: t, moves: [pnum] }
+    IO.inspect o
+    v = MoveList.changeset(o)
+    case Repo.insert(v) do
+        {:ok, pokemon} -> str
+        {:error, changeset} ->
+            IO.inspect changeset
+            b= Repo.all(from i in MoveList, where: i.name == ^t, select: i)
+            IO.inspect b
+            c = MoveList.changeset(b |> hd, %{moves: Enum.uniq(( b |> hd ).moves  ++ [pnum])  })
+            Repo.update(c)
+            str
+    end
+  end
   def par(string) do
    if (string |> hd) =~ "Pokedex" do
      string |> hd
@@ -293,6 +316,7 @@ end
     string |> tl |> hd
    end
   end
+
 
 
   def search_tm_list(name, tm_list) do

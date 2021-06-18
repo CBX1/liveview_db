@@ -26,7 +26,7 @@ defmodule PokemonDbWeb.SearchLive do
     o = from(g in subquery(qq), select: g.ability, order_by: g.ability)
     growth_rate = ["Fluctuating","Erratic","Slow","Fast","Medium","Parabolic"]
     location_query =  from n in Location, select: n.name, distinct: n.name, order_by: n.name
-    locations = Repo.all(location_query)
+    locations = ["All", "Polaris", "Calvera"] ++ Repo.all(location_query)
     pokemons = Repo.all(vv)
     # Polaris, Calvera, All
     abilities = Repo.all(o) |> tl
@@ -84,12 +84,14 @@ end
 def set_q(query,params,check) do
   cond do
     check == "location" ->
-      if params["location"] != ""  && !is_nil(params["location"])  do
-        # IO.inspect "check?"
-        from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, where: l.name == ^params["location"], select: p, limit: 200)
-      else
-        from(p in query, limit: 200)
-    end
+      cond do
+        params["location"] == "All" ->
+          from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, select: p, limit: 200, distinct: p)
+        params["location"] != ""  && !is_nil(params["location"]) ->
+          from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, where: ilike(l.name, ^params["location"]), select: p, limit: 200)
+        true ->
+          from(p in query, limit: 200)
+      end
     check == "ability" ->
       if params["ability"] != "" && !is_nil(params["ability"])  do
         from(p in query, where: ilike(p.hidden_ability,^"%#{params["ability"]}%") or fragment("?=ANY(regular_abilities)",^params["ability"]) )
