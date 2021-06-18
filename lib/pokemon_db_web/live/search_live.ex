@@ -18,7 +18,7 @@ defmodule PokemonDbWeb.SearchLive do
   def mount(_params, _session, socket) do
     vv = from p in Pokemon,
         select: %{type1: p.type1, type2: p.type2, id: p.id, internal_name: p.internal_name, name: p.name},
-        order_by: p.id
+        order_by: p.id, limit: 200
 
     yy = from wr in Pokemon, select: %{regular: wr.hidden_ability}, distinct: wr.hidden_ability
     q = from(a in Pokemon, select: %{ability: fragment("unnest(?)", a.regular_abilities)}, distinct: true )
@@ -86,9 +86,9 @@ def set_q(query,params,check) do
     check == "location" ->
       if params["location"] != ""  && !is_nil(params["location"])  do
         # IO.inspect "check?"
-        from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, where: l.name == ^params["location"], select: p)
+        from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, where: l.name == ^params["location"], select: p, limit: 200)
       else
-        query
+        from(p in query, limit: 200)
     end
     check == "ability" ->
       if params["ability"] != "" && !is_nil(params["ability"])  do
@@ -134,7 +134,7 @@ end
       left_join: pl in PokemonLocation, on: p.id == pl.pokemon_id,
       left_join: l in Location, on: l.id == pl.location_id,
       select: %{type1: p.type1, type2: p.type2, internal_name: p.internal_name, id: p.id, name: p.name},
-      order_by: p.id
+      order_by: p.id, limit: 200
       pokemons = Repo.all(vv)
       socket =
         socket

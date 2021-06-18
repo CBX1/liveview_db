@@ -136,6 +136,12 @@
        <td> <%= @main_data.base_stat."SPEED" %> </td>
       </tr>
 
+        <tr class="tetable">
+      <td> Total BST </td>
+       <td> <%= @main_data.base_stat."SPEED" + @main_data.base_stat."Sp. DEF" +  @main_data.base_stat."Sp. ATK"
+             + @main_data.base_stat."DEF" + @main_data.base_stat."ATK" +  @main_data.base_stat."HP"
+          %> </td>
+      </tr>
       </tbody>
     </table>
     </div>
