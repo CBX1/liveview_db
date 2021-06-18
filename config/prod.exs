@@ -56,7 +56,7 @@ import_config "prod.secret.exs"
 
 config :pokemon_db, PokemonDbWeb.Endpoint,
   http: [port: {:system, "PORT"}], # Possibly not needed, but doesn't hurt
-  url: [host: "empirepbs.tk", port: 80],
+  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
   check_origin: [
     "//empirepbs.tk",
     "//www.empirepbs.tk",
