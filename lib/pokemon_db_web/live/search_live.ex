@@ -131,8 +131,6 @@ end
     def handle_event("reset",_, socket) do
       changeset = PokemonForm.changeset(%PokemonForm{})
       vv = from p in Pokemon,
-      left_join: pl in PokemonLocation, on: p.id == pl.pokemon_id,
-      left_join: l in Location, on: l.id == pl.location_id,
       select: %{type1: p.type1, type2: p.type2, internal_name: p.internal_name, id: p.id, name: p.name},
       order_by: p.id, limit: 200
       pokemons = Repo.all(vv)
