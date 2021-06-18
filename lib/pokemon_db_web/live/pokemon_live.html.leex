@@ -98,14 +98,14 @@
 </div>
   <div class="container" style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
   <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> Base Stats </label>
-   <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
-      <div class="column" style="text-indent:10px"><%= @main_data.base_stat."HP" %></div>
+  <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
+      <div class="column" style="text-indent:10px"><%= @main_data.hp %></div>
       <div class="column" style="text-indent:10px"><%= @main_data.base_stat."ATK" %></div>
       <div class="column" style="text-indent:17px"><%= @main_data.base_stat."DEF" %></div>
       <div class="column" style="text-indent:10px"><%= @main_data.base_stat."SPEED" %></div>
       <div class="column" style="text-indent:10px"><%= @main_data.base_stat."Sp. ATK" %> </div>
       <div class="column" style="text-indent:15px"><%= @main_data.base_stat."Sp. DEF" %></div>
-    </div> 
+    </div> %>
 
     <div class="row" style="font-size:18px;border-bottom: 4px;margin-top:5px">
       <div class="column"  style="text-indent:8px">HP</div>
@@ -137,7 +137,7 @@
     </table>
   </div>
 
-  <div style="width:50%;float:left;margin-right:30px;padding-right:20px">
+  <div style="float:left;margin-right:60px;padding-right:20px">
   <div style="background-color:#eff0f3;padding:20px;margin-top:20px">
     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> TM and HM Moves </label>
     <table style="width:50%;padding:20px">
@@ -177,7 +177,7 @@
   </div>
   </div>
 <br style="clear:both;" />
-  <div style="width:50%;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
+  <div style="width:40%;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Egg Moves </label>
     <table style="width:50%;padding:20px">
       <thead>

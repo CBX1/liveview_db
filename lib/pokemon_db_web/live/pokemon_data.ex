@@ -34,9 +34,9 @@ defmodule PokemonDbWeb.PokemonLive do
 
   def handle_params(params, _uri, socket) do
     IO.inspect params
-
+    var = params["pokemon"] |> String.upcase
     mm = from p in Pokemon, left_join: pl in PokemonLocation, on: pl.pokemon_id == p.id, left_join: l in Location,
-    on: l.id == pl.location_id, select: [p, fragment("ARRAY_AGG(?)",l.name)], group_by: p.id, where: p.internal_name == ^params["pokemon"]
+    on: l.id == pl.location_id, select: [p, fragment("ARRAY_AGG(?)",l.name)], group_by: p.id, where: p.internal_name == ^var
 
     pokemons = Repo.all(mm)
     IO.inspect pokemons
