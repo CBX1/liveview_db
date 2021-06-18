@@ -39,9 +39,9 @@
       <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Abilities </label>
       <table style="width:100%;background-color:#eff0f3;padding:10px" >
         <thead>
-          <tr class="tetable">
-            <th>Type</th>
-            <th>Name</th>
+          <tr style="pointer-events:none">
+            <th style="text-indent:10px">Type</th>
+            <th style="text-indent:10px">Name</th>
           </tr>
         </thead>
         <tbody>
@@ -71,9 +71,9 @@
       <label style="font-size:30px;color:#0d0d0d;padding:15px"> Evolutions </label>
       <table style="width:100%;padding:20px">
         <thead>
-          <tr class="tetable">
-            <th>Method</th>
-            <th style="text-align:center">Pokemon</th>
+          <tr style="pointer-events:none">
+            <th style="text-indent:7px">Method</th>
+            <th style="text-align:center;text-indent:15px">Pokemon</th>
           </tr>
         </thead>
         <tbody>
@@ -103,37 +103,53 @@
     <div>
     <table style="width:100%;padding:20px">
       <thead>
-        <tr class="tetable">
-         <th >HP</th>
-          <th >Attack</th>
-           <th >Defense</th>
-            <th >Special Attack</th>
-             <th >Special Defense</th>
-              <th >Speed</th>
+        <tr style="pointer-events:none">
+         <th style="text-indent:8px">Stat</th>
+          <th >Value</th>
         </tr>
       </thead>
       <tbody>
 
       <tr class="tetable">
-         <td  > <%= @main_data.base_stat."HP" %> </td>
-         <td style="text-align:center" > <%= @main_data.base_stat."ATK" %> </td>
-         <td style="text-align:center"> <%= @main_data.base_stat."DEF" %> </td>
-         <td style="text-align:center"> <%= @main_data.base_stat."Sp. ATK" %> </td>
-         <td style="text-align:center" > <%= @main_data.base_stat."Sp. DEF" %> </td>
-         <td  style="text-align:center> <%= @main_data.base_stat."SPEED" %> </td>
+      <tr class="tetable">
+      <td> Health </td>
+       <td> <%= @main_data.base_stat."HP" %> </td>
       </tr>
+      <tr class="tetable">
+      <td> Attack </td>
+       <td> <%= @main_data.base_stat."ATK" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Defense </td>
+       <td> <%= @main_data.base_stat."DEF" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Special Attack </td>
+       <td> <%= @main_data.base_stat."Sp. ATK" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Special Defense </td>
+       <td> <%= @main_data.base_stat."Sp. DEF" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Speed </td>
+       <td> <%= @main_data.base_stat."SPEED" %> </td>
+      </tr>
+
       </tbody>
     </table>
     </div>
-  </div>
+
+</div>
+
 
 
   <div style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Level Up Moves </label>
     <table style="width:100%;padding:20px">
       <thead>
-        <tr class="tetable">
-          <th>Name</th>
+        <tr >
+          <th style="text-indent:10px">Name</th>
           <th style="text-align:center">Level</th>
         </tr>
       </thead>
@@ -153,8 +169,8 @@
     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> TM and HM Moves </label>
     <table style="width:50%;padding:20px">
       <thead>
-        <tr class="tetable">
-          <th>Name</th>
+        <tr style="pointer-events:none">
+          <th style="text-indent:10px">Name</th>
         </tr>
       </thead>
       <tbody>
@@ -173,7 +189,7 @@
     <table style="width:50%;padding:20px">
       <thead>
         <tr class="tetable">
-          <th>Name</th>
+          <th style="text-indent:10px">Name</th>
         </tr>
       </thead>
       <tbody>
@@ -188,12 +204,12 @@
   </div>
   </div>
 <br style="clear:both;" />
-  <div style="width:40%;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
+  <div style="width:85%;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Egg Moves </label>
     <table style="width:50%;padding:20px">
       <thead>
-        <tr class="tetable">
-          <th>Name</th>
+        <tr style="pointer-events:none" >
+          <th style="text-indent:10px">Name</th>
         </tr>
       </thead>
       <tbody>
