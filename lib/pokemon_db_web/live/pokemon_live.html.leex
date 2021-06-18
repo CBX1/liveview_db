@@ -21,18 +21,18 @@
     <br style="clear:both;" /> <br>
      <div style="background-color:#eff0f3;padding:20px">
 
-     <%= if @main_data.l != [nil] do %>
+     <%= if @locations != [nil] do %>
      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Locations </label>
-     <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @main_data.l do %>
-        <%= if location == @main_data.l |> List.last do %>
-        <%= location %>
-        <%= else %>
-        <%= location %>,
-      <% end %>
-        <% end %>
+     <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @locations do %>
+      <%= if location == @locations |> List.last do %>
+      <%= location %>
       <%= else %>
-      <label style="font-size:30px;color:#0d0d0d;"> Cannot be found in the wild </label>
+      <%= location %>,
       <% end %>
+       <% end %>
+       <%= else %>
+       <label style="font-size:30px;color:#0d0d0d;"> Cannot be found in the wild </label>
+       <% end %>
      </div>
 
     <div style="background-color:#eff0f3;padding:20px;margin-top:20px">
@@ -98,14 +98,14 @@
 </div>
   <div class="container" style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
   <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> Base Stats </label>
-  <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
-      <div class="column" style="text-indent:10px"><%= @main_data.hp %></div>
-      <div class="column" style="text-indent:10px"><%= @main_data.atk %></div>
-      <div class="column" style="text-indent:17px"><%= @main_data.def %></div>
-      <div class="column" style="text-indent:10px"><%= @main_data.spa %></div>
-      <div class="column" style="text-indent:10px"><%= @main_data.spd %> </div>
-      <div class="column" style="text-indent:15px"><%= @main_data.speed %></div>
-    </div>
+   <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
+      <div class="column" style="text-indent:10px"><%= @main_data.base_stat."HP" %></div>
+      <div class="column" style="text-indent:10px"><%= @main_data.base_stat."ATK" %></div>
+      <div class="column" style="text-indent:17px"><%= @main_data.base_stat."DEF" %></div>
+      <div class="column" style="text-indent:10px"><%= @main_data.base_stat."SPEED" %></div>
+      <div class="column" style="text-indent:10px"><%= @main_data.base_stat."Sp. ATK" %> </div>
+      <div class="column" style="text-indent:15px"><%= @main_data.base_stat."Sp. DEF" %></div>
+    </div> 
 
     <div class="row" style="font-size:18px;border-bottom: 4px;margin-top:5px">
       <div class="column"  style="text-indent:8px">HP</div>
@@ -115,10 +115,10 @@
       <div class="column"> Special Defense </div>
       <div class="column">Speed</div>
     </div>
-  </div>
-  </div>
+
+
   <div style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
-    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Moves Learned via Level Up </label>
+    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Level Up Moves </label>
     <table style="width:100%;padding:20px">
       <thead>
         <tr class="tetable">
@@ -127,32 +127,73 @@
         </tr>
       </thead>
       <tbody>
-        <%= for pokemon <- (@main_data.moves |> Enum.filter(fn str -> (str |> elem(2) ) =~ "Level" end)) do %>
-          <tr class="tetable">
-            <td> <%= pokemon |> elem(1) |> String.capitalize %></td>
-            <td style="text-align:center"> <%= (pokemon |> elem (2)) |> String.split(" ") |> List.last() %> </td>
-          </tr>
-        <% end %>
+      <%= for move <-( @main_data.moves |> Enum.filter(fn str -> str.learn =~ "Level" end)) do %>
+      <tr class="tetable">
+         <td > <%= move.name |> String.capitalize %> </td>
+       <td style="text-align:center"> <%= move.learn |> String.split(" ") |> List.last %> </td>
+      </tr>
+      <% end %>
       </tbody>
     </table>
   </div>
- <div style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
 
-     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;" for="o"> Moves Learned via Breeding </label>
-      <table id="o" style="width:30%">
+  <div style="width:50%;float:left;margin-right:30px;padding-right:20px">
+  <div style="background-color:#eff0f3;padding:20px;margin-top:20px">
+    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> TM and HM Moves </label>
+    <table style="width:50%;padding:20px">
       <thead>
         <tr class="tetable">
-          <th>Move</th>
+          <th>Name</th>
         </tr>
-        </thead>
-        <tbody>
-          <%= for pokemon <- (@main_data.moves |> Enum.filter(fn str -> ((str |> elem(2) ) =~ "Egg") end)) do %>
-            <tr class="tetable">
-              <td> <%= pokemon |> elem(1) |> String.capitalize %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+      </thead>
+      <tbody>
+      <%= for move <-( @main_data.moves |> Enum.filter(fn str -> (str.learn =~ "TM" || str.learn =~ "HM") end)) do %>
+      <tr class="tetable">
+         <td > <%= move.name |> String.capitalize %> </td>
+      </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  </div>
+  <div style="float:left;">
+  <div style="background-color:#eff0f3;padding:20px;margin-left:40px;margin-top:20px">
+    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Move Tutor Moves </label>
+    <table style="width:50%;padding:20px">
+      <thead>
+        <tr class="tetable">
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%= for move <-( @main_data.moves |> Enum.filter(fn str -> str.learn =~ "Tutor" end)) do %>
+      <tr class="tetable">
+         <td > <%= move.name |> String.capitalize %> </td>
+
+      </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  </div>
+<br style="clear:both;" />
+  <div style="width:50%;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
+    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Egg Moves </label>
+    <table style="width:50%;padding:20px">
+      <thead>
+        <tr class="tetable">
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%= for move <-( @main_data.moves |> Enum.filter(fn str -> str.learn =~ "Egg" end)) do %>
+      <tr class="tetable">
+         <td > <%= move.name |> String.capitalize %> </td>
+
+      </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 
 </div>

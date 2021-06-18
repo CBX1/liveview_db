@@ -13,6 +13,8 @@ defmodule PokemonDb.Repo.Migrations.CreatePokemons do
       add :evolution, {:array, {:map, :string}}
       add :growth_rate, :string
       add :internal_name, :string
+      add :moves, {:array, :jsonb}, default: []
+      add :base_stat, :jsonb
     end
 
   end

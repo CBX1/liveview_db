@@ -4,7 +4,6 @@ defmodule PokemonDb.PokemonForm do
 
   schema  "pokemon_form" do
     field :name, :string
-    field :move, :string
     field :ability, :string
     field :growth_rate, :string
     field :location, :string
@@ -15,7 +14,7 @@ defmodule PokemonDb.PokemonForm do
   def changeset(pokemon_data, params \\ %{}) do
     IO.inspect params
     pokemon_data
-      |> cast(params, [:name, :move, :ability, :growth_rate, :location, :type1, :type2], empty_values: [])
+      |> cast(params, [:name, :ability, :growth_rate, :location, :type1, :type2], empty_values: [])
 
   end
 

@@ -1,4 +1,4 @@
-defmodule PokemonDb.Move do
+defmodule PokemonDb.MoveEmbed do
   use Ecto.Schema
 
   embedded_schema  do

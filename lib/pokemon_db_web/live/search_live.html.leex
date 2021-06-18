@@ -18,20 +18,16 @@
   </div>
 <div>
 <br style="clear:both;" />
-<div style="float:left;margin-right:322px">
-  <label> Enter Move </label>
-    <%= select f, :move, @moves, prompt: "" %>
+<div style="float:left;margin-right:367px">
+<label> Enter Growth Rate </label>
+     <%= select f, :growth_rate, @growth_rate, prompt: "" %>
+</div>
 </div>
   <div style="float:left;">
   <label> Enter Ability </label>
     <%= select f, :ability, @abilities, prompt: "" %>
 </div>
 <br style="clear:both;" />
-<div style="float:left;margin-right:370px">
-<label> Enter Growth Rate </label>
-     <%= select f, :growth_rate, @growth_rate, prompt: "" %>
-</div>
-     <div style="float:left">
 <label> Enter Location </label>
      <%= select f, :location, @location, prompt: "" %>
      </div>

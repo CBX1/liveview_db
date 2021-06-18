@@ -12,14 +12,16 @@ defmodule PokemonDb.Pokemon do
       field :regular_abilities, {:array, :string}
       field :evolution, {:array, {:map, :string}}
       field :growth_rate, :string
-      has_many :moves, PokemonDb.Move
       many_to_many :location, PokemonDb.Location, join_through: "pokemons_locations"
-      has_one :base_stats, PokemonDb.BaseStat
+      embeds_one :base_stat, PokemonDb.BaseStat, on_replace: :update
+      embeds_many :moves, PokemonDb.Move, on_replace: :delete
+
+
     end
 
 
 
-    def chpngeset(pokemon, params \\ %{}) do
+    def changeset(pokemon, params \\ %{}) do
       pokemon
       |> change(params)
       |> validate_required([:name,:p_num,:type1,:regular_abilities,:description, :internal_name])

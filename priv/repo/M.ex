@@ -177,7 +177,7 @@ defmodule Main do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
       newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
        tms = Tm.read
-       Enum.map(newmap, fn str -> parse(str,tms) end)
+        Enum.map(newmap, fn str -> parse(str,tms) end)
     #    newmap |> hd |> parse(tms)
 
 end
@@ -218,9 +218,9 @@ end
             nparse = cnn |> tl |> eggMoves()
             {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
             egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
-#           unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
-#    String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
-         natural_moves = all_moves ++ egg_moves_schema
+           unnatural_moves =  search_tm_list(data |> tl |> tl |> hd |>
+    String.slice(13..(String.length(data |> tl |> tl |> hd))),tm_list)
+         natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves
        {:ok, ncontent} = Map.fetch(nparse, :newestdata)
 
       eee =par(ncontent |> tl  |> tl |> tl |> tl |> tl |> tl |> tl)
@@ -261,38 +261,28 @@ end
             # {"Sp. ATK", "60"},
             # {"Sp. DEF", "80"}
         }
-        changeset_bst = BaseStat.changeset(base_stats)
-        if changeset_bst.valid? do
-            changeset_pokemon = Pokemon.changeset(%PokemonDb.Pokemon{:p_num => pnum  ,
+
+          changeset_pokemon =  PokemonDb.Pokemon.changeset(%PokemonDb.Pokemon{:p_num => pnum  ,
             :name => pname, :type1 => ptype1,
               :type2 => ptype2, :growth_rate => growth_rate,
                  :regular_abilities => regular_abilities,
                  :hidden_ability => hidden_ability,
                   :description => pokedex_entry,  :evolution => evolution,
-                  :internal_name => internal_name
+                  :internal_name => internal_name, :base_stat => base_stats, :moves => natural_moves
                })
-            if changeset_pokemon.valid? do
-               changeset_pokemon= changeset_pokemon
-                    |> put_assoc(:moves, natural_moves)
-                    |> put_assoc(:base_stats, base_stats)
 
+            if changeset_pokemon.valid? do
                    case Repo.insert(changeset_pokemon) do
                 {:ok, pokemon} ->
                     IO.puts("Record for #{pokemon.name} was created.")
-                    {changeset_pokemon.data.p_num,  data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))}
+                    {changeset_pokemon.data.p_num,  internal_name}
                     # Tuple for many-many relation
                 {:error, changeset} ->
                     IO.inspect(changeset.errors)
-                    {changeset_pokemon.data.p_num,  data |> tl |> tl |> hd |> String.slice(13..(String.length(data |> tl |> tl |> hd)))}
-               end
-            else
-                {:error, IO.inspect(changeset_pokemon.errors)}
+                    {changeset_pokemon.data.p_num,  internal_name}
             end
-
-
-        else
-            {:error,  IO.inspect(changeset_bst.errors)}
         end
+
 
 
   end
@@ -413,6 +403,8 @@ end
 
 
 defmodule Tm do
+
+
     def read do
         {:ok, contents} = File.read("assets/static/tm.txt")
         array_generalform = contents |> String.split("#================================================================") |> Enum.filter(fn str -> str != "" end)
