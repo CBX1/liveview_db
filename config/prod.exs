@@ -57,11 +57,6 @@ import_config "prod.secret.exs"
 config :pokemon_db, PokemonDbWeb.Endpoint,
   http: [port: {:system, "PORT"}], # Possibly not needed, but doesn't hurt
   url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
-  check_origin: [
-    "//empirepbs.tk",
-    "//www.empirepbs.tk",
-    "//http://sparkling-simplistic-neontetra.gigalixirapp.com/"
-  ],
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
   server: true
 
