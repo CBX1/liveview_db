@@ -99,22 +99,33 @@
   <div class="container" style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
   <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> Base Stats </label>
   <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
-      <div class="column" style="text-indent:10px"><%= @main_data.hp %></div>
-      <div class="column" style="text-indent:10px"><%= @main_data.base_stat."ATK" %></div>
-      <div class="column" style="text-indent:17px"><%= @main_data.base_stat."DEF" %></div>
-      <div class="column" style="text-indent:10px"><%= @main_data.base_stat."SPEED" %></div>
-      <div class="column" style="text-indent:10px"><%= @main_data.base_stat."Sp. ATK" %> </div>
-      <div class="column" style="text-indent:15px"><%= @main_data.base_stat."Sp. DEF" %></div>
-    </div> %>
+      <div class="column" style="text-indent:10px"><%= @main_data.hp %>
+    <div>
+    <table style="width:100%;padding:20px">
+      <thead>
+        <tr class="tetable">
+         <th >HP</th>
+          <th >Attack</th>
+           <th >Defense</th>
+            <th >Special Attack</th>
+             <th >Special Defense</th>
+              <th >Speed</th>
+        </tr>
+      </thead>
+      <tbody>
 
-    <div class="row" style="font-size:18px;border-bottom: 4px;margin-top:5px">
-      <div class="column"  style="text-indent:8px">HP</div>
-      <div class="column">Attack</div>
-      <div class="column">Defense</div>
-      <div class="column">Special Attack </div>
-      <div class="column"> Special Defense </div>
-      <div class="column">Speed</div>
+      <tr class="tetable">
+         <td  > <%= @main_data.base_stat."HP" %> </td>
+         <td style="text-align:center" > <%= @main_data.base_stat."ATK" %> </td>
+         <td style="text-align:center"> <%= @main_data.base_stat."DEF" %> </td>
+         <td style="text-align:center"> <%= @main_data.base_stat."Sp. ATK" %> </td>
+         <td style="text-align:center" > <%= @main_data.base_stat."Sp. DEF" %> </td>
+         <td  style="text-align:center"> <%= @main_data.base_stat."SPEED" %> </td>
+      </tr>
+      </tbody>
+    </table>
     </div>
+  </div>
 
 
   <div style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
