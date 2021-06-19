@@ -523,13 +523,13 @@ end
 
         vv =["HP", "ATK", "DEF", "SPEED", "Sp. ATK", "Sp. DEF"]
        effort_points = vv |> Enum.zip(content |> tl  |> tl |> tl |> tl |> hd |> String.slice(13..String.length(content |> tl  |> tl |> tl |> tl |> hd)) |> String.split(",")) |> Map.new()
-       base_stats = %PokemonDb.BaseStat{
-        HP: Map.fetch(effort_points, "HP") |> elem(1),
-        ATK: Map.fetch(effort_points, "ATK") |> elem(1),
-        DEF: Map.fetch(effort_points, "DEF") |> elem(1),
-        SPEED: Map.fetch(effort_points, "SPEED") |> elem(1),
-        "Sp. ATK": Map.fetch(effort_points, "Sp. ATK") |> elem(1),
-        "Sp. DEF": Map.fetch(effort_points, "Sp. DEF") |> elem(1)
+       base_stats = %{
+        :HP => Map.fetch(effort_points, "HP") |> elem(1),
+        :ATK => Map.fetch(effort_points, "ATK") |> elem(1),
+        :DEF => Map.fetch(effort_points, "DEF") |> elem(1),
+        :SPEED => Map.fetch(effort_points, "SPEED") |> elem(1),
+        :"Sp. ATK" => Map.fetch(effort_points, "Sp. ATK") |> elem(1),
+        :"Sp. DEF" => Map.fetch(effort_points, "Sp. DEF") |> elem(1)
         # {"HP", "63"},
         # {"ATK", "67"},
         # {"DEF", "65"},
@@ -539,7 +539,7 @@ end
     }
 
     ni = Repo.all(from p in Pokemon, where: ^pnum == p.p_num) |> hd
-    nii = Pokemon.changeset(ni, %{ev: base_stats})
+    nii = Pokemon.changeset(ni, ev: base_stats)
     Repo.update(nii)
 
   end
