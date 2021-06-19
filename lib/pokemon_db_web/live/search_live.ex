@@ -27,7 +27,7 @@ defmodule PokemonDbWeb.SearchLive do
     o = from(g in subquery(qq), select: g.ability, order_by: g.ability)
     growth_rate = ["Fluctuating","Erratic","Slow","Fast","Medium","Parabolic"]
     location_query =  from n in Location, select: n.name, distinct: n.name, order_by: n.name
-    locations = ["All", "Polaris", "Calvera"] ++ Repo.all(location_query)
+    locations = ["All", "Polaris", "Calvera","Toliman"] ++ Repo.all(location_query)
     pokemons = Repo.all(vv)
     # Polaris, Calvera, All
     move_list = Repo.all(moves)
@@ -98,6 +98,8 @@ def set_q(query,params,check) do
       cond do
         params["location"] == "All" ->
           from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, select: p, limit: 200, distinct: p)
+        params["location"] == "Toliman" ->
+          from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, where: (l.name == "Serenity Grotto" or l.name ==  "Serenity Springs" or l.name == "Molten Core" or l.name == "Telurite Mines" or l.name == "Toliman Enclave" or l.name =="Hawthorn Power Plant")  , select: p, limit: 200, distinct: p)
         params["location"] != ""  && !is_nil(params["location"]) ->
           from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, where: like( l.name, ^"%#{params["location"]}%"), select: p, limit: 200, distinct: p)
         true ->
