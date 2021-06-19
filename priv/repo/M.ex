@@ -305,9 +305,7 @@ end
             b= Repo.all(from i in MoveList, where: i.name == ^t, select: i)
             IO.inspect b
             c = MoveList.changeset(b |> hd, %{moves: Enum.uniq(( b |> hd ).moves  ++ [pnum])  })
-            if c.valid? do
-                Repo.update(c)
-            end
+            Repo.update(c)
             str
     end
   end
