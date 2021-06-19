@@ -11,6 +11,7 @@ defmodule PokemonDbWeb.SearchLive do
     Move,
     BaseStat,
     PokemonForm,
+    MoveList
   }
   alias PokemonDbWeb.PokemonLive
 
@@ -19,7 +20,7 @@ defmodule PokemonDbWeb.SearchLive do
     vv = from p in Pokemon,
         select: %{type1: p.type1, type2: p.type2, id: p.id, internal_name: p.internal_name, name: p.name},
         order_by: p.id, limit: 200
-
+    moves = from n in "move_list", select: n.name
     yy = from wr in Pokemon, select: %{regular: wr.hidden_ability}, distinct: wr.hidden_ability
     q = from(a in Pokemon, select: %{ability: fragment("unnest(?)", a.regular_abilities)}, distinct: true )
     qq = from(b in subquery(q), union: ^yy, distinct: true)
@@ -29,6 +30,7 @@ defmodule PokemonDbWeb.SearchLive do
     locations = ["All", "Polaris", "Calvera"] ++ Repo.all(location_query)
     pokemons = Repo.all(vv)
     # Polaris, Calvera, All
+    move_list = Repo.all(moves)
     abilities = Repo.all(o) |> tl
     type_query = from p in Pokemon, select: p.type1, distinct: p.type1
     types = Repo.all(type_query)
@@ -41,6 +43,7 @@ defmodule PokemonDbWeb.SearchLive do
       |> assign(:location, locations)
       |> assign(:types, types)
       |> assign(:expand, false)
+      |> assign(:moves, move_list)
 
 
     {:ok, socket}
@@ -60,12 +63,14 @@ defmodule PokemonDbWeb.SearchLive do
     #       |> assign(:pokemon_data, changeset)
     #        |> assign(:pokemons, pokemons)
     # else
+      IO.inspect params
       set = from(p in Pokemon, as: :pkmn )
         |> set_q(params, "name")
         |> set_q(params, "type1")
         |> set_q(params, "type2")
         |> set_q(params, "growth_rate")
         |> set_q(params, "ability")
+        |> set_q(params, "moves")
         |> set_q(params, "location")
         # mm = from(set in PokemonLocation)
         #       |> set_mm(set,params,"location")
@@ -83,12 +88,18 @@ end
 
 def set_q(query,params,check) do
   cond do
+    check == "moves" ->
+      if params["move"] != "" && !is_nil(params["move"]) do
+        from(p in query, join: m in MoveList, on: fragment("? = ANY(m1.moves)",p.p_num), where: m.name == ^params["move"])
+      else
+        query
+      end
     check == "location" ->
       cond do
         params["location"] == "All" ->
           from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, select: p, limit: 200, distinct: p)
         params["location"] != ""  && !is_nil(params["location"]) ->
-          from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, where: ilike(l.name, ^params["location"]), select: p, limit: 200)
+          from(p in query, join: pl in PokemonLocation, on: pl.pokemon_id == p.id, join: l in Location, on: l.id == pl.location_id, where: like( l.name, ^"%#{params["location"]}%"), select: p, limit: 200, distinct: p)
         true ->
           from(p in query, limit: 200)
       end

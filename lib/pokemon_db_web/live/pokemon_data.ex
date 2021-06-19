@@ -33,17 +33,27 @@ defmodule PokemonDbWeb.PokemonLive do
   end
 
   def handle_params(params, _uri, socket) do
-    # IO.inspect params
-    var = params["pokemon"] |> String.upcase
-    mm = from p in Pokemon, left_join: pl in PokemonLocation, on: pl.pokemon_id == p.id, left_join: l in Location,
-    on: l.id == pl.location_id, select: [p, fragment("ARRAY_AGG(?)",l.name)], group_by: p.id, where: p.internal_name == ^var
+     IO.inspect params
+    if params["pokemon"] == "NIDORANfE" || params["pokemon"] == "NIDORANmA" do
+      mm = from p in Pokemon, left_join: pl in PokemonLocation, on: pl.pokemon_id == p.id, left_join: l in Location,
+      on: l.id == pl.location_id, select: [p, fragment("ARRAY_AGG(?)",l.name)], group_by: p.id, where: p.internal_name == ^params["pokemon"]
+      pokemons = Repo.all(mm)
+      socket = socket |> assign(:main_data, pokemons |> hd |> hd) |> assign(:locations, pokemons |> hd |> tl |> hd) #|> assign(:moves, movs)
+      {:noreply, socket}
 
-    pokemons = Repo.all(mm)
-    # IO.inspect pokemons
+    else
+      var = params["pokemon"] |> String.upcase
+      mm = from p in Pokemon, left_join: pl in PokemonLocation, on: pl.pokemon_id == p.id, left_join: l in Location,
+      on: l.id == pl.location_id, select: [p, fragment("ARRAY_AGG(?)",l.name)], group_by: p.id, where: p.internal_name == ^var
+
+      pokemons = Repo.all(mm)
+      socket = socket |> assign(:main_data, pokemons |> hd |> hd) |> assign(:locations, pokemons |> hd |> tl |> hd) #|> assign(:moves, movs)
+      {:noreply, socket}
+    end
+
 
     # movs = (pokemons |> hd).moves |> Enum.flatten
-    socket = socket |> assign(:main_data, pokemons |> hd |> hd) |> assign(:locations, pokemons |> hd |> tl |> hd) #|> assign(:moves, movs)
-    {:noreply, socket}
+
   end
 
 

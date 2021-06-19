@@ -28,8 +28,13 @@
     <%= select f, :ability, @abilities, prompt: "" %>
 </div>
 <br style="clear:both;" />
+<div style="float:left;margin-right:308px">
 <label> Enter Location </label>
      <%= select f, :location, @location, prompt: "" %>
+     </div>
+<div style="float:left;">
+<label> Enter Move </label>
+     <%= select f, :move, @moves, prompt: "" %>
      </div>
 </section>
 <% end %>
