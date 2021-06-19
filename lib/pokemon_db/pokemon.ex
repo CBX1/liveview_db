@@ -15,6 +15,7 @@ defmodule PokemonDb.Pokemon do
       many_to_many :location, PokemonDb.Location, join_through: "pokemons_locations"
       embeds_one :base_stat, PokemonDb.BaseStat, on_replace: :update
       embeds_many :moves, PokemonDb.Move, on_replace: :delete
+      embeds_one :ev, PokemonDb.BaseStat, on_replace: :update
 
 
     end

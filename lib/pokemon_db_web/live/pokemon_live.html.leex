@@ -227,5 +227,51 @@
       </tbody>
     </table>
   </div>
+<div class="container" style="width:70%;float:left;margin-top:20px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
+  <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> EVs </label>
+  <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
+      <div class="column" style="text-indent:10px"><%= @main_data.hp %>
+    <div>
+    <table style="width:100%;padding:20px">
+      <thead>
+        <tr style="pointer-events:none">
+         <th style="text-indent:8px">Stat</th>
+          <th >Value</th>
+        </tr>
+      </thead>
+      <tbody>
 
+      <tr class="tetable">
+      <tr class="tetable">
+      <td> Health </td>
+       <td> <%= @main_data.ev."HP" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Attack </td>
+       <td> <%= @main_data.ev."ATK" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Defense </td>
+       <td> <%= @main_data.ev."DEF" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Special Attack </td>
+       <td> <%= @main_data.ev."Sp. ATK" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Special Defense </td>
+       <td> <%= @main_data.ev."Sp. DEF" %> </td>
+      </tr>
+      <tr class="tetable">
+      <td> Speed </td>
+       <td> <%= @main_data.ev."SPEED" %> </td>
+      </tr>
+
+        <tr class="tetable">
+      <td> Total BST </td>
+       <td> <%= (@main_data.ev."SPEED" + @main_data.ev."Sp. DEF" +  @main_data.ev."Sp. ATK"  + @main_data.ev."DEF" + @main_data.ev."ATK" +  @main_data.ev."HP")
+          %> </td>
+      </tr>
+      </tbody>
+    </table>
 </div>

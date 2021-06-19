@@ -456,4 +456,104 @@ defmodule Tm do
         #The names of the tms start with L to normalize data manipulation for each array of maps
 
     end
+
+end
+
+
+defmodule Tno do
+    import Ecto.Query
+alias PokemonDb.{
+    Repo,
+    Pokemon
+}
+    def read do
+        a = Repo.all(from Pokemon)
+        b = a |> Enum.map(fn str -> n(str) end)
+        b
+    end
+
+    def n(t) do
+
+         if t.evolution != nil do
+          o = t.evolution |> Enum.map(fn str -> getPok(Map.fetch(str, "name") |> elem(1), t.name) end)
+         else
+            nil
+        end
+    end
+
+    def getPok(name,o) do
+        a = Repo.all(from p in Pokemon, where: p.internal_name == ^name) |> hd
+        if a.evolution == nil do
+            b = Pokemon.changeset(a, %{:evolution =>  [%{"name" => o, "Evolves" => "from"   }]})
+            Repo.update(b)
+        else
+           b = Pokemon.changeset(a, %{:evolution =>  a.evolution ++ [%{"name" => o, "Evolves" => "from"   }]})
+           Repo.update(b)
+        end
+
+    end
+
+end
+
+
+
+defmodule Mainono do
+    alias PokemonDb.Repo
+    import Ecto.Changeset
+    alias PokemonDb.BaseStat
+    alias PokemonDb.Move
+    alias PokemonDb.Pokemon
+    alias PokemonDb.MoveList
+
+    import Ecto.Query
+  def read do
+      {:ok, contents} = File.read("assets/static/pokemon.txt")
+      newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
+        Enum.map(newmap, fn str -> parse(str) end)
+end
+
+    def parse(da) do #This is a really long function that just parses a given text blob of a Pokemon
+        data = Enum.filter(da, fn string -> string != "" end)
+        pnum = data |> hd |> String.slice(1..( String.length(data |> hd) - 2) ) |> Integer.parse |> elem(0)
+        pname = data |> tl |> hd |> String.slice(5, String.length(data |> tl |> hd))
+        ptype1 = data |> tl |> tl |> tl |> hd |> String.slice(6, String.length(data |> tl |> tl |> hd))
+        newinfo = parser2(data |> tl |> tl |> tl |> tl |> hd,data)
+        ndata = Map.fetch(newinfo, :newdata)
+        {:ok, content} = ndata
+
+        vv =["HP", "ATK", "DEF", "SPEED", "Sp. ATK", "Sp. DEF"]
+       effort_points = vv |> Enum.zip(content |> tl  |> tl |> tl |> tl |> hd |> String.slice(13..String.length(content |> tl  |> tl |> tl |> tl |> hd)) |> String.split(",")) |> Map.new()
+       base_stats = %PokemonDb.BaseStat{
+        HP: Map.fetch(effort_points, "HP") |> elem(1),
+        ATK: Map.fetch(effort_points, "ATK") |> elem(1),
+        DEF: Map.fetch(effort_points, "DEF") |> elem(1),
+        SPEED: Map.fetch(effort_points, "SPEED") |> elem(1),
+        "Sp. ATK": Map.fetch(effort_points, "Sp. ATK") |> elem(1),
+        "Sp. DEF": Map.fetch(effort_points, "Sp. DEF") |> elem(1)
+        # {"HP", "63"},
+        # {"ATK", "67"},
+        # {"DEF", "65"},
+        # {"SPEED", "70"},
+        # {"Sp. ATK", "60"},
+        # {"Sp. DEF", "80"}
+    }
+
+    ni = Repo.all(from p in Pokemon, where: ^pnum == p.p_num) |> hd
+    nii = Pokemon.changeset(ni, %{ev: base_stats})
+    Repo.update(nii)
+
+  end
+
+
+  def parser2(v, data) do
+      if v  =~ "Type2" do
+         type =  v |>  String.slice(6, String.length(v))
+         %{:type2 => type, :newdata => data |> tl |> tl |> tl |> tl |> tl }
+      else
+          %{:type2 => nil, :newdata => data |> tl |> tl |> tl |> tl }
+      end
+
+  end
+
+
 end
