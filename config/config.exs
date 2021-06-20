@@ -15,6 +15,7 @@ config :pokemon_db, PokemonDbWeb.Endpoint,
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+config :analytics_ex, repo: PokemonDb.Repo
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

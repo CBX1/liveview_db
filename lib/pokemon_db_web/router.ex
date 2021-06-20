@@ -8,6 +8,7 @@ defmodule PokemonDbWeb.Router do
     plug :put_root_layout, {PokemonDbWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug(AnalyticsEx.Plugs.CountRequestsPerPath)
   end
 
   pipeline :api do
