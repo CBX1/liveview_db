@@ -4,6 +4,7 @@ defmodule PokemonDbWeb.PokemonLive do
   import Ecto.Changeset
   alias PokemonDbWeb.Router.Helpers, as: Routes
   alias PokemonDbWeb.SearchLive
+  alias PokemonDbWeb.MoveLive
   alias PokemonDb.{
     Repo,
     Pokemon,
@@ -58,7 +59,12 @@ defmodule PokemonDbWeb.PokemonLive do
 
 
   def handle_event("test",%{"pname" => tes}, socket) do
+
     {:noreply,  push_redirect(socket, to: Routes.live_path(socket, PokemonDbWeb.PokemonLive, tes))}
   end
 
+  def handle_event("moverr", params, socket) do
+    a = %{move: params["movedata"]}
+    {:noreply,  push_redirect(socket, to: Routes.live_path(socket, MoveLive, params["movedata"]))}
+  end
 end

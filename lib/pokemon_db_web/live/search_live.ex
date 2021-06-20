@@ -20,7 +20,7 @@ defmodule PokemonDbWeb.SearchLive do
     vv = from p in Pokemon,
         select: %{type1: p.type1, type2: p.type2, id: p.id, internal_name: p.internal_name, name: p.name},
         order_by: p.id, limit: 200
-    moves = from n in "move_list", select: n.name
+    moves = from n in "move_list", select: n.internal_name
     yy = from wr in Pokemon, select: %{regular: wr.hidden_ability}, distinct: wr.hidden_ability
     q = from(a in Pokemon, select: %{ability: fragment("unnest(?)", a.regular_abilities)}, distinct: true )
     qq = from(b in subquery(q), union: ^yy, distinct: true)
@@ -90,7 +90,7 @@ def set_q(query,params,check) do
   cond do
     check == "moves" ->
       if params["move"] != "" && !is_nil(params["move"]) do
-        from(p in query, join: m in MoveList, on: fragment("? = ANY(m1.moves)",p.p_num), where: m.name == ^params["move"])
+        from(p in query, join: m in MoveList, on: fragment("? = ANY(m1.moves)",p.p_num), where: m.internal_name == ^params["move"])
       else
         query
       end
