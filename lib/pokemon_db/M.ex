@@ -597,7 +597,7 @@ defmodule PokemonDb.MoveData do
 {basepp, _} = basepp |> Integer.parse
 data = %{internal_name:  name, basepp: basepp, name: internal_name, type: type, power: power, acc: acc, forc: forc, description: b}
 a = MoveList.changeset(%MoveList{}, data)
-Repo.insert(a, on_conflict: [set: [acc: a.acc, basepp: a.basepp, internal_name: a.changes.internal_name, type: a.changes.type, power: a.changes.power, forc: a.changes.forc, description: a.changes.description]],
+Repo.insert(a, on_conflict: [set: [acc: a.changes.acc, basepp: a.changes.basepp, internal_name: a.changes.internal_name, type: a.changes.type, power: a.changes.power, forc: a.changes.forc, description: a.changes.description]],
 conflict_target: :name)
     end
 
@@ -610,7 +610,7 @@ conflict_target: :name)
 {basepp, _} = basepp |> Integer.parse
 data = %{internal_name:  name, basepp: basepp, name: internal_name, type: type, power: power, acc: acc, forc: forc, description: d}
 a = MoveList.changeset(%MoveList{}, data)
-Repo.insert(a, on_conflict: [set: [internal_name: a.changes.internal_name, type: a.changes.type, power: a.changes.power, forc: a.changes.forc, description: a.changes.description]],
+Repo.insert(a, on_conflict: [set: [acc: a.changes.acc, basepp: a.changes.basepp, internal_name: a.changes.internal_name, type: a.changes.type, power: a.changes.power, forc: a.changes.forc, description: a.changes.description]],
 conflict_target: :name)
 
 end
