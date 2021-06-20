@@ -5,6 +5,13 @@ defmodule PokemonDb.MoveList do
   schema "move_list" do
     field :name, :string
     field :moves, {:array, :integer}
+    field :internal_name, :string
+    field :power, :id
+    field :description, :string
+    field :forc, :string
+    field :type, :string
+    field :acc, :id
+    field :basepp, :id
   end
 
   @doc false

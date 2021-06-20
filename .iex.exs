@@ -4,5 +4,11 @@ alias PokemonDb.{
   PokemonLocation,
   Location,
   Move,
-  BaseStat
+  BaseStat,
+  MoveList,
+  Main,
+  M,
+  MoveData,
+  CorrectSpelling,
+  Tm
 }

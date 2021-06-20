@@ -18,8 +18,3 @@ defmodule PokemonDb.PokemonLocation do
       |> unique_constraint([:pokemon_id, :location_id])
   end
 end
-
-
-
-
-
