@@ -79,6 +79,8 @@ defmodule C do
     alias PokemonDb.Repo
     alias PokemonDb.M
     alias PokemonDb.Main
+    alias PokemonDb.Pokemon
+    import Ecto.Query
 
     def onn do
         IO.puts "test"
@@ -100,7 +102,8 @@ d |> Enum.map(fn s -> zipV(s |> elem(0), s |> elem(1)) end)
     end
 
     def zipV(z,list) do
-        changeset = PokemonLocation.changeset(%PokemonLocation{pokemon_id: z, location_id: list |> hd })
+        n = Repo.all(from m in Pokemon, where: ^z == m.p_num, select: m.id) |> hd
+        changeset = PokemonLocation.changeset(%PokemonLocation{pokemon_id: n, location_id: list |> hd })
         if changeset.valid? do
             case Repo.insert(changeset) do
                 {:ok, pokemon_location} -> IO.puts("Record for { #{pokemon_location.pokemon_id}, #{pokemon_location.location_id} } was created.")
@@ -284,7 +287,7 @@ end
                         |> String.slice(6..String.length(all_moves))
                         |> String.split(",")
                         |> parese(pnum, "Learns at Level ")
-        nparse = data |> tl |> eggMoves()
+         nparse = data |> tl |> eggMoves()
         {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
         egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
         unnatural_moves =  search_tm_list(internal_name, tm_list)
@@ -293,10 +296,13 @@ end
         {:ok, data} = Map.fetch(nparse, :newestdata)
 
 
-        [_,_,_,_,_,_,_,_,pokedex_entry | last_data] = data
+        [_,_,_,_,_,_,_| last_data] = data
+        pokedex_entry = last_data
+                             |> par
         pokedex_entry = pokedex_entry
-                             |> String.slice(8..String.length(pokedex_entry))
+                                |> String.slice(8..String.length(pokedex_entry))
 
+        [_,_ | last_data] = last_data
         {:ok, last_data} =Map.fetch( last_data
                                             |> item_rarity_Check(),
                                     :ndata)
@@ -310,11 +316,15 @@ end
                                     )
 
 
-        [_,_,evolution | _] = last_data
+        evolution = last_data
                             |> check
                             |> check
+                            |> check
+                            |> check
+                            |> hd
 
-        evolution = evolution
+
+         evolution = evolution
                       |> String.split("=")
                       |> tl
                       |> hd
@@ -333,7 +343,7 @@ end
             })
 
         if changeset_pokemon.valid? do
-                case Repo.insert(changeset_pokemon, on_conflict: [set: [moves: changeset_pokemon.data.moves,]], conflict_target: :internal_name) do
+                case Repo.insert(changeset_pokemon, on_conflict: {:replace_all_except, [:id]}, conflict_target: :internal_name) do
                     {:ok, pokemon} ->
                         IO.puts("Record for #{pokemon.name} was created.")
                         {changeset_pokemon.data.p_num,  internal_name}
@@ -414,7 +424,7 @@ end
       end
   end
   def form_name(dd) do
-      (dd =~ "FormName" || dd =~ "BattlerPlayerY")
+      (dd =~ "FormName" || dd =~ "BattlerPlayerY" || dd =~ "BattlerAltitude" || dd =~ "BattlerEnemyY" )
   end
   def conjure(data) do
       if data |> hd =~ "HiddenAbility" do
@@ -429,7 +439,8 @@ end
       []
   end
   def convert(d) do
-      if d == [""] do
+    IO.inspect d
+      if d == [""] || d == nil || d == [] do
           nil
       else
            [%{d |> tl |> hd => d |> tl |> tl |>hd, "name" => d |> hd}] ++ convert(d |> tl |> tl |> tl)
@@ -584,35 +595,51 @@ defmodule PokemonDb.MoveData do
         c = contents |> String.split("\n")
           c |> Enum.map(fn str -> parse(str |> String.split("\"")) end)
 
-          Repo.insert(%MoveList{name: "FLY", internal_name: "Fly", description: "The user flies up into the sky and then strikes its target on the next turn.", type: "FLYING", forc: "PHYSICAL", power: 90, acc: 100}, on_conflict: [set: [basepp: 24, acc: 95]], conflict_target: :name)
-          Repo.insert(%MoveList{name: "WATERFALL", internal_name: "Waterfall", description: "Waterfall deals damage and has a 20% chance of causing the target to flinch (if the target has not yet moved).", type: "WATER", forc: "PHYSICAL", power: 80, acc: 100}, on_conflict: [set: [basepp: 24, acc: 100]], conflict_target: :name)
+        #   Repo.insert(%MoveList{name: "FLY", internal_name: "Fly", description: "The user flies up into the sky and then strikes its target on the next turn.", type: "FLYING", forc: "PHYSICAL", power: 90, acc: 95, basepp: 24}, on_conflict: [set: [basepp: 24, acc: 95]], conflict_target: :name)
+        #   Repo.insert(%MoveList{name: "WATERFALL", internal_name: "Waterfall", description: "Waterfall deals damage and has a 20% chance of causing the target to flinch (if the target has not yet moved).", type: "WATER", forc: "PHYSICAL", power: 80, acc: 100, basepp: 24}, on_conflict: [set: [basepp: 24, acc: 100]], conflict_target: :name)
 
     end
     def parse([a,b]) do
 
-[_,internal_name, name,_, power , type, forc, acc, basepp | _] = a |> String.split(",")
+[_,internal_name, name,_, power , type, forc, acc, basepp, additional_effect, target, priority, al_code | _] = a |> String.split(",")
 # name and internal name are switched because the data is being upserted
 {power, _} = power |> Integer.parse
 {acc, _} = acc |> Integer.parse
 {basepp, _} = basepp |> Integer.parse
-data = %{internal_name:  name, basepp: basepp, name: internal_name, type: type, power: power, acc: acc, forc: forc, description: b}
+{additional_effect, _} = additional_effect |> Integer.parse
+{target, _} = target |> Integer.parse
+{priority, _} = priority |> Integer.parse
+data = %{internal_name:  name, basepp: basepp, name: internal_name, type: type, power: power,
+acc: acc, forc: forc, description: b, additional_effect: additional_effect,
+ target: target, priority: priority, al_code: al_code}
+#  additional effect: integer, target: int, priority: int, al_code: string
+
 a = MoveList.changeset(%MoveList{}, data)
-Repo.insert(a, on_conflict: [set: [acc: a.changes.acc, basepp: a.changes.basepp, internal_name: a.changes.internal_name, type: a.changes.type, power: a.changes.power, forc: a.changes.forc, description: a.changes.description]],
+
+Repo.insert(a, on_conflict: {:replace_all_except, [:moves, :id]},
 conflict_target: :name)
     end
 
     def parse(  [a,d,_] ) do
 
-[_,internal_name, name,_, power , type, forc, acc, basepp | _] = a |> String.split(",")
+[_,internal_name, name,_, power , type, forc, acc, basepp, additional_effect, target, priority, al_code | _] = a |> String.split(",")
 # name and internal name are switched because the data is being upserted
+IO.inspect name
 {power, _} = power |> Integer.parse
 {acc, _} = acc |> Integer.parse
 {basepp, _} = basepp |> Integer.parse
-data = %{internal_name:  name, basepp: basepp, name: internal_name, type: type, power: power, acc: acc, forc: forc, description: d}
-a = MoveList.changeset(%MoveList{}, data)
-Repo.insert(a, on_conflict: [set: [acc: a.changes.acc, basepp: a.changes.basepp, internal_name: a.changes.internal_name, type: a.changes.type, power: a.changes.power, forc: a.changes.forc, description: a.changes.description]],
-conflict_target: :name)
+{additional_effect, _} = additional_effect |> Integer.parse
+{target, _} = target |> Integer.parse
+{priority, _} = priority |> Integer.parse
+data = %{internal_name:  name, basepp: basepp, name: internal_name, type: type, power: power,
+acc: acc, forc: forc, description: d, additional_effect: additional_effect,
+ target: target, priority: priority, al_code: al_code}
 
+    a = MoveList.changeset(%MoveList{}, data)
+
+    Repo.insert(a, on_conflict: {:replace_all_except, [:moves, :id]},
+    conflict_target: :name)
 end
 
-end
+
+    end

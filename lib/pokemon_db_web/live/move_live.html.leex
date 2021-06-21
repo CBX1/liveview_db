@@ -8,5 +8,23 @@ Description: <%= @move.description  %> <br>
  Power: <%= @move.power %> <br>
  Accuracy:  <%= @move.acc %><br>
 Base PP: <%= @move.basepp %><br>
+Additional Effect Chance: <%= @move.additional_effect %> <br>
+<%= Map.fetch(@tareget, @move.target) |> elem(1) %> <br>
+Priority: <%= @move.priority %> <br>
+<table>
+<thead>
+<tr>
+<th> Code </th>
+<th> Description </th>
+</tr>
+<tbody>
+<%=  for m <- @move.al_code |> String.split("") |> Enum.filter(fn str -> str != "" end) do %>
+<tr>
+          <th>      <%= m %> <br> </th>
+           <th> <%= Map.fetch(@moveinf, String.to_atom(m)) |> elem(1) %><br> </th>
+        <% end %>
+</tr>
+</tbody>
+</table>
 
 </div>

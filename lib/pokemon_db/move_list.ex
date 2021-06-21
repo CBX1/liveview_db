@@ -12,6 +12,11 @@ defmodule PokemonDb.MoveList do
     field :type, :string
     field :acc, :id
     field :basepp, :id
+    field :additional_effect, :integer
+    field :target, :integer
+    field :priority, :integer
+    field :al_code, :string
+
   end
 
   @doc false
