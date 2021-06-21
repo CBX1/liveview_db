@@ -47,7 +47,7 @@
         <tbody>
           <%= for ability <- @main_data.regular_abilities do %>
             <tr class="tetable">
-              <td> Regular</td>
+              <td phx-click="click_ability" phx-value-ability="<%= ability %>"> Regular</td>
                 <td ><%= ability %></td>
             </tr>
           <% end %>
