@@ -560,7 +560,7 @@ defmodule PokemonDb.Tm do
 end
 
 # Pre Evolutions
-defmodule Tno do
+defmodule PokemonDb.Tno do
     import Ecto.Query
 alias PokemonDb.{
     Repo,
@@ -606,8 +606,8 @@ defmodule PokemonDb.MoveData do
         c = contents |> String.split("\n")
           c |> Enum.map(fn str -> parse(str |> String.split("\"")) end)
 
-        #   Repo.insert(%MoveList{name: "FLY", internal_name: "Fly", description: "The user flies up into the sky and then strikes its target on the next turn.", type: "FLYING", forc: "PHYSICAL", power: 90, acc: 95, basepp: 24}, on_conflict: [set: [basepp: 24, acc: 95]], conflict_target: :name)
-        #   Repo.insert(%MoveList{name: "WATERFALL", internal_name: "Waterfall", description: "Waterfall deals damage and has a 20% chance of causing the target to flinch (if the target has not yet moved).", type: "WATER", forc: "PHYSICAL", power: 80, acc: 100, basepp: 24}, on_conflict: [set: [basepp: 24, acc: 100]], conflict_target: :name)
+          Repo.insert(%MoveList{name: "FLY", internal_name: "Fly", description: "The user flies up into the sky and then strikes its target on the next turn.", type: "FLYING", forc: "PHYSICAL", power: 90, acc: 95, basepp: 24}, on_conflict: [set: [basepp: 24, acc: 95]], conflict_target: :name)
+          Repo.insert(%MoveList{name: "WATERFALL", internal_name: "Waterfall", description: "Waterfall deals damage and has a 20% chance of causing the target to flinch (if the target has not yet moved).", type: "WATER", forc: "PHYSICAL", power: 80, acc: 100, basepp: 24}, on_conflict: [set: [basepp: 24, acc: 100]], conflict_target: :name)
 
     end
     def parse([a,b]) do
@@ -656,7 +656,7 @@ end
     end
 
 
-defmodule Abil do
+defmodule PokemonDb.Abil do
     alias PokemonDb.Ability
     alias PokemonDb.Repo
         def read do
