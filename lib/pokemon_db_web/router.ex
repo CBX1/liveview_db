@@ -20,6 +20,7 @@ defmodule PokemonDbWeb.Router do
     live "/", SearchLive
     live "/:pokemon", PokemonLive
     live "/move/:move", MoveLive
+    live "/ability/:ability", AbilityLive
   end
 
   # Other scopes may use custom stacks.

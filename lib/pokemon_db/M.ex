@@ -186,6 +186,7 @@ defmodule PokemonDb.Main do
     alias PokemonDb.Pokemon
     alias PokemonDb.MoveList
     alias PokemonDb.Tm
+    alias PokemonDb.Ability
     import Ecto.Query
   def read do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
@@ -276,11 +277,14 @@ end
         regular_abilities = regular_abilities
                                             |> String.slice(10..String.length(regular_abilities))
                                             |> String.split(",")
-
+                                            |> Enum.map(fn str -> get_ability_name(str) end)
 
         other_data = other_data
                             |> conjure()
         {:ok, hidden_ability} = Map.fetch(other_data, :hidden)
+
+        hidden_ability = get_ability_name(hidden_ability)
+        {hidden_ability, regular_abilities}
         {:ok, data} = Map.fetch(other_data, :data)
         [all_moves | other_data] = data
         all_moves = all_moves
@@ -343,7 +347,7 @@ end
             })
 
         if changeset_pokemon.valid? do
-                case Repo.insert(changeset_pokemon, on_conflict: {:replace_all_except, [:id]}, conflict_target: :internal_name) do
+                case Repo.insert(changeset_pokemon, on_conflict: [set: [regular_abilities: changeset_pokemon.data.regular_abilities, hidden_ability: changeset_pokemon.data.hidden_ability]], conflict_target: :internal_name) do
                     {:ok, pokemon} ->
                         IO.puts("Record for #{pokemon.name} was created.")
                         {changeset_pokemon.data.p_num,  internal_name}
@@ -354,6 +358,13 @@ end
             end
         end
 
+  end
+  def get_ability_name(nil) do
+
+  end
+
+  def get_ability_name(hidden_ability) do
+    Repo.all(from p in Ability, where: p.internal_name == ^hidden_ability, select: p.name) |> hd
   end
 
   def add_Moves(str, pnum) do
@@ -643,3 +654,28 @@ end
 
 
     end
+
+
+defmodule Abil do
+    alias PokemonDb.Ability
+    alias PokemonDb.Repo
+        def read do
+            {:ok, contents} = File.read("assets/static/t.txt")
+             contents
+                    |> String.split("\n")
+                    |> Enum.map(fn str -> str |> String.split("\"") end)
+                    |> Enum.map(fn str -> change(str) end)
+
+
+
+        end
+
+        def change(str) do
+           [a,b | _] = str
+           [_, internal_name, name | _ ] = a
+                                    |> String.split(",")
+           data = %{internal_name: internal_name, name: name, description: b}
+           changeset = Ability.changeset(%Ability{},data)
+           Repo.insert(changeset, on_conflict: {:replace_all_except, [:id]}, conflict_target: :internal_name)
+        end
+end

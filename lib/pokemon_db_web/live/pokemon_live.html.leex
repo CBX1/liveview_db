@@ -48,13 +48,13 @@
           <%= for ability <- @main_data.regular_abilities do %>
             <tr class="tetable">
               <td> Regular</td>
-                <td ><%= ability |> String.capitalize %></td>
+                <td ><%= ability %></td>
             </tr>
           <% end %>
           <%= if @main_data.hidden_ability != nil do %>
           <tr class="tetable">
             <td> Hidden </td>
-            <td> <%= @main_data.hidden_ability |> String.capitalize %> </td>
+            <td phx-click="click_ability" phx-value-ability="<%= @main_data.hidden_ability %>"> <%=  @main_data.hidden_ability  %> </td>
           </tr>
           <% end %>
         </tbody>

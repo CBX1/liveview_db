@@ -5,6 +5,7 @@ defmodule PokemonDbWeb.PokemonLive do
   alias PokemonDbWeb.Router.Helpers, as: Routes
   alias PokemonDbWeb.SearchLive
   alias PokemonDbWeb.MoveLive
+  alias PokemonDbWeb.AbilityLive
   alias PokemonDb.{
     Repo,
     Pokemon,
@@ -66,5 +67,9 @@ defmodule PokemonDbWeb.PokemonLive do
   def handle_event("moverr", params, socket) do
     a = %{move: params["movedata"]}
     {:noreply,  push_redirect(socket, to: Routes.live_path(socket, MoveLive, params["movedata"]))}
+  end
+
+  def handle_event("click_ability", params, socket) do
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, AbilityLive, params["ability"]))}
   end
 end
