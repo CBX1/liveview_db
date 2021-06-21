@@ -567,9 +567,10 @@ alias PokemonDb.{
     Pokemon
 }
     def read do
-        a = Repo.all(from Pokemon)
+        a = Repo.all(from m in Pokemon, select: m)
+
         b = a |> Enum.map(fn str -> n(str) end)
-        b
+        # b
     end
 
     def n(t) do
@@ -582,14 +583,18 @@ alias PokemonDb.{
     end
 
     def getPok(name,o) do
-        a = Repo.all(from p in Pokemon, where: p.internal_name == ^name) |> hd
-        if a.evolution == nil do
-            b = Pokemon.changeset(a, %{:evolution =>  [%{"name" => o, "Evolves" => "from"   }]})
-            Repo.update(b)
-        else
-           b = Pokemon.changeset(a, %{:evolution =>  a.evolution ++ [%{"name" => o, "Evolves" => "from"   }]})
-           Repo.update(b)
+        a = Repo.all(from p in Pokemon, where: p.internal_name == ^name)
+        if a != [] do
+            a = a |> hd
+            if a.evolution == nil do
+                b = Pokemon.changeset(a, %{:evolution =>  [%{"name" => o, "Evolves" => "from"   }]})
+                Repo.update(b)
+            else
+               b = Pokemon.changeset(a, %{:evolution =>  a.evolution ++ [%{"name" => o, "Evolves" => "from"   }]})
+               Repo.update(b)
+            end
         end
+
 
     end
 
