@@ -81,6 +81,8 @@ def typeAdvantage(type) do
           fillinBlanks(%{NORMAL: 0.5, WATER: 2, GRASS: 2, FIRE: 0.5, STEEL: 2, FIGHTING: 2, FLYING: 0.5, POISON: 0.5})
         type == "DARK" ->
           fillinBlanks(%{BUG: 2, FIGHTING: 2, PSYCHIC: 0, FAIRY: 2, GHOST: 0.5, DARK: 0.5})
+        type == "DRAGON" ->
+          fillinBlanks(%{ICE: 2, GRASS: 0.5, WATER: 0.5, FIRE: 0.5, FAIRY: 2, DRAGON: 2})
     end
 end
 
