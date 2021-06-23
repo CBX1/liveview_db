@@ -21,7 +21,7 @@ Priority: <%= @move.priority %> <br>
 <%=  for m <- @move.al_code |> String.split("") |> Enum.filter(fn str -> str != "" end) do %>
 <tr>
           <th>      <%= m %> <br> </th>
-           <th> <%= Map.fetch(@moveinf, String.to_atom(m)) |> elem(1) %><br> </th>
+           <th> <%= (Map.fetch(@moveinf, String.to_atom(m))) |> elem(1) %><br> </th>
         <% end %>
 </tr>
 </tbody>

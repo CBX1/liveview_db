@@ -28,7 +28,8 @@ k: "The move is a sound-based move.",
 l: "The move is a powder-based move (Grass-type Pokémon are immune to them).",
 m: "The move is a pulse-based move (powered up by the ability Mega Launcher).",
 n: "The move is a bomb-based move (resisted by the ability Bulletproof).",
-o: "The move is a dance move (repeated by the ability Dancer)."
+o: "The move is a dance move (repeated by the ability Dancer).",
+p: "I don't really know what this means."
     }
 
 
@@ -41,11 +42,9 @@ o: "The move is a dance move (repeated by the ability Dancer)."
   def handle_params(params, _uri, socket) do
     IO.inspect params
     var = params["move"]
-            |> String.replace(" ", "")
-            |> String.replace("-", "")
-            |> String.replace("'", "")
-            |> String.upcase
-    a = Repo.all(from m in MoveList, where: m.name == ^var, select: m) |> hd
+    IO.inspect var
+    a = Repo.all(from m in MoveList, where: m.internal_name == ^var, select: m) |> hd
+
     socket = socket
                 |> assign(:move, a)
     {:noreply, socket}
