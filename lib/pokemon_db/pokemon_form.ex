@@ -10,6 +10,7 @@ defmodule PokemonDb.PokemonForm do
     field :type1, :string
     field :type2, :string
     field :move, :string
+    field :egg_group, :string
   end
 
   def changeset(pokemon_data, params \\ %{}) do

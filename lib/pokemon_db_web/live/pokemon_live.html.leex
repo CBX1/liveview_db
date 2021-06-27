@@ -104,6 +104,18 @@
   <%end %>
 </div>
 
+  <div style="background-color:#eff0f3;padding:20px">
+     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Egg Groups </label>
+     <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @main_data.egg_group do %>
+      <%= if location == @main_data.egg_group |> List.last do %>
+      <%= location %>
+      <%= else %>
+      <%= location %>,
+      <% end %>
+       <% end %>
+     </div>
+
+
 <div style="margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
       <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;padding-top:20px;padding-left:20px"> Pokedex Entry </label>
       <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.description %> </p>

@@ -191,10 +191,10 @@ defmodule PokemonDb.Main do
   def read do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
       newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
-       tms = Tm.read
-          Enum.map(newmap, fn str -> parse(str,tms) end)
-    #   test1 =  newmap |> tl |> hd |> parse(tms)
-        # test2 = newmap |> hd |> parse(tms)
+    #    tms = Tm.read
+    Enum.map(newmap, fn str -> parse(str,"tms") end)
+    #    {test1 =  newmap |> tl |> hd |> parse("tms"),
+    #   test2 = newmap |> hd |> parse("tms")}
 
 end
 
@@ -287,20 +287,23 @@ end
         {hidden_ability, regular_abilities}
         {:ok, data} = Map.fetch(other_data, :data)
         [all_moves | other_data] = data
-        all_moves = all_moves
-                        |> String.slice(6..String.length(all_moves))
-                        |> String.split(",")
-                        |> parese(pnum, "Learns at Level ")
-         nparse = data |> tl |> eggMoves()
-        {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
-        egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
-        unnatural_moves =  search_tm_list(internal_name, tm_list)
-        natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves ++ unnatural_moves
+        # all_moves = all_moves
+        #                 |> String.slice(6..String.length(all_moves))
+        #                 |> String.split(",")
+        #                 |> parese(pnum, "Learns at Level ")
+        nparse = data |> tl |> eggMoves()
+        # {:ok, egg_moves_noschema} = Map.fetch(nparse, :egg_moves)
+        # egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
+        # unnatural_moves =  search_tm_list(internal_name, tm_list)
+        # natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves ++ unnatural_moves
 
         {:ok, data} = Map.fetch(nparse, :newestdata)
 
 
-        [_,_,_,_,_,_,_| last_data] = data
+        [egg_group,_,_,_,_,_,_| last_data] = data
+        egg_group = egg_group
+                            |> String.slice(14..String.length(egg_group))
+                            |> String.split(",")
         pokedex_entry = last_data
                              |> par
         pokedex_entry = pokedex_entry
@@ -342,12 +345,14 @@ end
             :regular_abilities => regular_abilities,
             :hidden_ability => hidden_ability,
             :description => pokedex_entry,  :evolution => evolution,
-            :internal_name => internal_name, :base_stat => base_stats, :moves => natural_moves,
-            ev: effort_points
+            :internal_name => internal_name, :base_stat => base_stats, #:moves => natural_moves,
+            :ev => effort_points, :egg_group => egg_group
             })
 
+            IO.inspect changeset_pokemon
+
         if changeset_pokemon.valid? do
-                case Repo.insert(changeset_pokemon, on_conflict: [set: [regular_abilities: changeset_pokemon.data.regular_abilities, hidden_ability: changeset_pokemon.data.hidden_ability]], conflict_target: :internal_name) do
+                case Repo.insert(changeset_pokemon, on_conflict: [set: [egg_group: egg_group]], conflict_target: :internal_name) do
                     {:ok, pokemon} ->
                         IO.puts("Record for #{pokemon.name} was created.")
                         {changeset_pokemon.data.p_num,  internal_name}

@@ -12,6 +12,7 @@ defmodule PokemonDb.Pokemon do
       field :regular_abilities, {:array, :string}
       field :evolution, {:array, {:map, :string}}
       field :growth_rate, :string
+      field :egg_group, {:array, :string}
       many_to_many :location, PokemonDb.Location, join_through: "pokemons_locations"
       embeds_one :base_stat, PokemonDb.BaseStat, on_replace: :update
       embeds_many :moves, PokemonDb.Move, on_replace: :delete

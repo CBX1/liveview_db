@@ -20,6 +20,7 @@ defmodule PokemonDbWeb.SearchLive do
     vv = from p in Pokemon,
         select: %{type1: p.type1, type2: p.type2, id: p.id, internal_name: p.internal_name, name: p.name},
         order_by: p.id, limit: 200
+     egg_group = from p in Pokemon, select: fragment("unnest(egg_group)"), distinct: fragment("unnest(egg_group)")
     moves = from n in "move_list", select: n.internal_name
     yy = from wr in Pokemon, select: %{regular: wr.hidden_ability}, distinct: wr.hidden_ability
     q = from(a in Pokemon, select: %{ability: fragment("unnest(?)", a.regular_abilities)}, distinct: true )
@@ -34,6 +35,7 @@ defmodule PokemonDbWeb.SearchLive do
     abilities = Repo.all(o) |> tl
     type_query = from p in Pokemon, select: p.type1, distinct: p.type1
     types = Repo.all(type_query)
+    egg_group = Repo.all(egg_group)
     socket =
       socket
       |> assign(:pokemon_data, PokemonForm.changeset(%PokemonForm{}))
@@ -44,6 +46,7 @@ defmodule PokemonDbWeb.SearchLive do
       |> assign(:types, types)
       |> assign(:expand, false)
       |> assign(:moves, move_list)
+      |> assign(:egg_group, egg_group)
 
 
     {:ok, socket}
@@ -66,6 +69,7 @@ defmodule PokemonDbWeb.SearchLive do
       IO.inspect params
       set = from(p in Pokemon, as: :pkmn )
         |> set_q(params, "name")
+        |> set_q(params, "egg_groups")
         |> set_q(params, "type1")
         |> set_q(params, "type2")
         |> set_q(params, "growth_rate")
@@ -114,6 +118,12 @@ def set_q(query,params,check) do
     check == "name" ->
       if params["name"] != ""   && !is_nil(params["name"]) do
         from(p in query, where: ilike(p.name,^"%#{params["name"]}%") )
+      else
+        query
+      end
+    check == "egg_groups" ->
+      if params["egg_group"] != ""  && !is_nil(params["egg_group"]) do
+        from(p in query, where: fragment("?=Any(egg_group)",^params["egg_group"]))
       else
         query
       end
