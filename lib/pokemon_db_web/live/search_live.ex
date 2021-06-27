@@ -46,7 +46,7 @@ defmodule PokemonDbWeb.SearchLive do
       |> assign(:types, types)
       |> assign(:expand, false)
       |> assign(:moves, move_list)
-      |> assign(:egg_group, "egg_group")
+      |> assign(:egg_group, egg_group)
 
 
     {:ok, socket}
