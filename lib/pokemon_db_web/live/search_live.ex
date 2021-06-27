@@ -31,6 +31,7 @@ defmodule PokemonDbWeb.SearchLive do
     locations = ["All", "Polaris", "Calvera","Toliman"] ++ Repo.all(location_query)
     pokemons = Repo.all(vv)
     # Polaris, Calvera, All
+    #ff
     move_list = Repo.all(moves)
     abilities = Repo.all(o) |> tl
     type_query = from p in Pokemon, select: p.type1, distinct: p.type1
