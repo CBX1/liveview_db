@@ -21,7 +21,7 @@ defmodule PokemonDbWeb.SearchLive do
         select: %{type1: p.type1, type2: p.type2, id: p.id, internal_name: p.internal_name, name: p.name},
         order_by: p.id, limit: 200
      egg_group = from p in Pokemon, select: fragment("unnest(egg_group)"), distinct: fragment("unnest(egg_group)")
-    moves = from n in "move_list", select: n.internal_name
+    moves = from n in "move_list", select: n.internal_name, order_by: n.internal_name
     yy = from wr in Pokemon, select: %{regular: wr.hidden_ability}, distinct: wr.hidden_ability
     q = from(a in Pokemon, select: %{ability: fragment("unnest(?)", a.regular_abilities)}, distinct: true )
     qq = from(b in subquery(q), union: ^yy, distinct: true)
