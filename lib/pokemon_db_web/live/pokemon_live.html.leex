@@ -20,19 +20,7 @@
 
 
     <br style="clear:both;" /> <br>
-
-   <div style="background-color:#eff0f3;padding-left:55px; margin-top: 20px;margin-bottom:20px">
-      <%= inspect @typeChart %>
-      </div>
-
-
-
-
-
-<br style="clear:both;" /> <br>
-   </div>
-
-     <div style="background-color:#eff0f3;padding:20px">
+  <div style="background-color:#eff0f3;padding:20px">
 
      <%= if @locations != [nil] do %>
      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Locations </label>
@@ -47,6 +35,166 @@
        <label style="font-size:30px;color:#0d0d0d;"> Cannot be found in the wild </label>
        <% end %>
      </div>
+<div  style="background-color:#eff0f3;padding-left:18px;margin-top: 20px;width:300px">
+ <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Type Effectiveness  </label>
+   <div style="display:grid;grid-template-columns: repeat(4, 60px);
+background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
+      <div>
+        <div class="GRASS" style="width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        GRA
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."GRASS"%>
+        </div>
+      </div>
+        <div>
+        <div class="FIRE" style="text-indent:4px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+            FIR
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."FIRE"%>
+        </div>
+      </div>
+        <div>
+        <div class="WATER" style="text-indent:2px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        WAT
+        </div>
+        <div style="margin-left:9px;font-size:10px">
+          <%= @typeChart."WATER"%>
+        </div>
+      </div>
+        <div>
+        <div class="NORMAL" style="width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        NOR
+        </div>
+        <div style="margin-left:8px;font-size:10px">
+          <%= @typeChart."NORMAL"%>
+        </div>
+      </div>
+        <div>
+        <div class="ELECTRIC" style="text-indent:3px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        ELE
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."ELECTRIC"%>
+        </div>
+      </div>
+      <div>
+        <div class="ICE" style="text-indent:4px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        ICE
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."ICE"%>
+        </div>
+      </div>
+        <div>
+        <div class="FIGHTING" style="text-indent:4px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        FIG
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."FIGHTING"%>
+        </div>
+      </div>
+      <div>
+        <div class="POISON" style="text-indent:4px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        POI
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."POISON"%>
+        </div>
+      </div>
+        <div>
+        <div class="GROUND" style="width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        GRO
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."GROUND"%>
+        </div>
+      </div>
+        <div>
+        <div class="PSYCHIC" style="text-indent:2px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        PSY
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."PSYCHIC"%>
+        </div>
+      </div>
+        <div>
+        <div class="FLYING" style="text-indent:4px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        FLY
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."FLYING"%>
+        </div>
+      </div>
+      <div>
+        <div class="BUG" style="width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        BUG
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."BUG"%>
+        </div>
+      </div>
+      <div>
+        <div class="ROCK" style="width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        ROC
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."ROCK"%>
+        </div>
+      </div>
+        <div>
+        <div class="GHOST" style="width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        GHO
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."GHOST"%>
+        </div>
+      </div>
+      <div>
+        <div class="DRAGON" style="text-indent:2px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        DRA
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."DRAGON"%>
+        </div>
+      </div>
+      <div>
+        <div class="DARK" style="text-indent:1px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        DAR
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."DARK"%>
+        </div>
+      </div>
+
+      <div>
+        <div class="STEEL" style="text-indent:2px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        STE
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."STEEL"%>
+        </div>
+      </div>
+
+        <div>
+        <div class="FAIRY" style="text-indent:5px;width:34px;font-size:10px;text-size-adjust:auto;padding:2px;color:white;">
+        FAI
+        </div>
+        <div style="margin-left:7px;font-size:10px">
+          <%= @typeChart."FAIRY"%>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+
+
+
+   </div>
+
+
 
     <div style="background-color:#eff0f3;padding:20px;margin-top:20px">
       <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Abilities </label>
