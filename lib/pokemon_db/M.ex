@@ -192,7 +192,7 @@ defmodule PokemonDb.Main do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
       newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
     tms = Tm.read
-     Enum.map(newmap, fn str -> parse(str,"tms") end)
+     Enum.map(newmap, fn str -> parse(str,tms) end)
     #    test1 =  newmap |> tl |> hd |> parse(tms)
     #   test2 = newmap |> hd |> parse("tms")}
 
