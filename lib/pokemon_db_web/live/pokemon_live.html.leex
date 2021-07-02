@@ -223,7 +223,7 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
     </div>
     <div style="margin-top:20px;background-color:#eff0f3;padding:20px">
       <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;margin-right:20px;"> Growth Rate </label>
-      <p style="text-indent:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.growth_rate %> </p>
+      <p style="text-indent:30px;font-size:30px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.growth_rate %> </p>
     </div>
 
 <div style="margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
@@ -322,98 +322,39 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 
 
 
-  <div style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px;">
-    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Level Up Moves </label>
-    <table style="padding:20px">
+  <div style="background-color:#eff0f3;padding-top:20px;margin-top:20px;width:1140px">
+    <label style="font-size:30px;margin-left:20px;margin-bottom:20px;color:#0d0d0d;"> All Moves </label>
+
+      <table style="padding:20px">
       <thead>
-        <tr >
-         <th style="text-align:center">Level</th>
-          <th style="text-indent:10px">Name</th>
-          <th> Type </th>
-          <th> Category </th>
-          <th> Description
+        <tr>
+         <th style="text-align:center;">Level</th>
+          <th style="">Name</th>
+          <th style=""> Type </th>
+          <th style=""> Category </th>
+          <th style=""> Description
 
 
         </tr>
       </thead>
       <tbody>
-      <%= for move <-( @main_data.moves |> Enum.filter(fn str -> str.learn =~ "Level" end)) do %>
-      <tr class="tetable">
-             <td phx-click="moverr" phx-value-movedata="<%= move.name  %>" style="text-align:center"> <%= move.learn |> String.split(" ") |> List.last %> </td>
-         <td phx-click="moverr" phx-value-movedata="<%= move.name %>" > <%= move.name %> </td>
-         <td class="<%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %>" style="color:white"> <%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %> </td>
-         <td> <%= Repo.all(from p in MoveList, select: p.forc, where: p.internal_name == ^move.name) %> </td>
-         <td> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name) %> </td>
+         <tr class="tetable">
+      <%= for move <- @main_data.moves  do %>
+
+             <td style="text-indent:0" phx-click="moverr" phx-value-movedata="<%= move.name  %>" style="text-align:center"> <%= move.learn %> </td>
+         <td style="text-indent:0" phx-click="moverr" phx-value-movedata="<%= move.name %>" > <%= move.name %> </td>
+         <%= if move.name != "Hidden Power" do %>
+         <td> <div class="<%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %>" style="color:white;width:130px;height:50x;text-align:center"> <%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %> </div></td>
+         <td style=";text-indent:0"> <%= Repo.all(from p in MoveList, select: p.forc, where: ( p.internal_name == ^move.name ) ) %> </td>
+         <td style=";text-indent:0"> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name  ) %> </td>
+        <% end %>
       </tr>
       <% end %>
       </tbody>
     </table>
+
   </div>
 
-  <div style="margin-right:60px;padding-right:20px">
-  <div style="background-color:#eff0f3;padding:20px;margin-top:20px">
-    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> TM and HM Moves </label>
-    <table style="width:80%;padding:20px">
-      <thead>
-        <tr style="pointer-events:none">
-          <th style="text-indent:10px">Name</th>
-        </tr>
-      </thead>
-      <tbody>
-      <%= for move <-( @main_data.moves |> Enum.filter(fn str -> (str.learn =~ "TM" || str.learn =~ "HM") end)) do %>
-      <tr class="tetable">
-         <td phx-click="moverr" phx-value-movedata="<%= move.name %>" > <%= move.name  %> </td>
-      </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-  </div>
-  <div style=>
-  <div style="background-color:#eff0f3;padding:20px;margin-left:40px;margin-top:20px">
-    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Move Tutor Moves </label>
-    <table style="width:80%;padding:20px">
-      <thead>
-        <tr class="tetable">
-          <th style="text-indent:10px">Name</th>
-        </tr>
-      </thead>
-      <tbody>
-      <%= for move <-( @main_data.moves |> Enum.filter(fn str -> str.learn =~ "Tutor" end)) do %>
-      <tr class="tetable">
-         <td phx-click="moverr" phx-value-movedata="<%= move.name %>" > <%= move.name %> </td>
-
-      </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-  </div>
-<br style="clear:both;" />
-  <div style="width:100%;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-top:20px">
-    <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Egg Moves </label>
-    <table style="width:100%;padding:20px">
-      <thead>
-        <tr style="pointer-events:none" >
-          <th style="text-indent:10px">Name</th>
-          <th style="text-indent:10px">Type</th>
-          <th style="text-indent:10px">Category</th>
-          <th style="text-indent:10px">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-      <%= for move <-( @main_data.moves |> Enum.filter(fn str -> str.learn =~ "Egg" end)) do %>
-      <tr class="tetable">
-         <td phx-click="moverr" phx-value-movedata="<%= move.name %>"> <%= move.name  %> </td>
-          <td class="<%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %>" style="color:white"> <%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %> </td>
-         <td> <%= Repo.all(from p in MoveList, select: p.forc, where: p.internal_name == ^move.name) %> </td>
-         <td> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name) %> </td>
-
-      </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
 <div class="container" style="width:70%;float:left;margin-top:20px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
   <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> EVs </label>
   <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
