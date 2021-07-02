@@ -230,7 +230,7 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
  <%= if @main_data.evolution != nil do %>
     <div>
       <label style="font-size:30px;color:#0d0d0d;padding:15px"> Evolutions </label>
-      <table style="width:100%;padding:20px">
+      <table style="width:100%;padding:20px;font-size:30px">
         <thead>
           <tr style="pointer-events:none">
             <th style="text-indent:7px">Method</th>
@@ -254,7 +254,7 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 
   <div style="background-color:#eff0f3;padding:20px">
      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Egg Groups </label>
-     <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @main_data.egg_group do %>
+     <p style="margin-left:30px;font-size:30px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @main_data.egg_group do %>
       <%= if location == @main_data.egg_group |> List.last do %>
       <%= location %>
       <%= else %>
@@ -266,60 +266,47 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 
 <div style="margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
       <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;padding-top:20px;padding-left:20px"> Pokedex Entry </label>
-      <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.description %> </p>
+      <p style="margin-left:30px;font-size:30px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.description %> </p>
 
 </div>
-  <div class="container" style="background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
+
+<div style="font-size:25px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-bottom:20px">
   <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> Base Stats </label>
-  <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
-      <div class="column" style="text-indent:10px"><%= @main_data.hp %>
-    <div>
-    <table style="width:100%;padding:20px">
-      <thead>
-        <tr style="pointer-events:none">
-         <th style="text-indent:8px">Stat</th>
-          <th >Value</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div class="container" style="display:grid;grid-template-columns: repeat(7, 170px);background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
 
-      <tr class="tetable">
-      <tr class="tetable">
-      <td> Health </td>
-       <td> <%= @main_data.base_stat."HP" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Attack </td>
-       <td> <%= @main_data.base_stat."ATK" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Defense </td>
-       <td> <%= @main_data.base_stat."DEF" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Special Attack </td>
-       <td> <%= @main_data.base_stat."Sp. ATK" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Special Defense </td>
-       <td> <%= @main_data.base_stat."Sp. DEF" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Speed </td>
-       <td> <%= @main_data.base_stat."SPEED" %> </td>
-      </tr>
+    <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
+        <div class="column" style="text-indent:10px"><%= @main_data.hp %>
+  <div> <%= @main_data.base_stat."HP" %> <br> HP </div>
+  <div> <span style="text-align:center"> <%= @main_data.base_stat."ATK" %>  </span> <br> Attack</div>
+  <div> <%= @main_data.base_stat."DEF" %> <br> Defense</div>
+  <div> <%= @main_data.base_stat."Sp. ATK"%> <br> Special <br> Attack </div>
+  <div> <%= @main_data.base_stat."Sp. DEF" %> <br> Special <br> Defense </div>
+  <div> <%= @main_data.base_stat."SPEED" %> <br> Speed </div>
+  <div> <%= @main_data.base_stat."HP" + @main_data.base_stat."ATK" + @main_data.base_stat."DEF"
+  +  @main_data.base_stat."Sp. ATK" + @main_data.base_stat."Sp. DEF" + @main_data.base_stat."SPEED"
+   %> <br> Total</div>
 
-        <tr class="tetable">
-      <td> Total BST </td>
-       <td> <%= (@main_data.base_stat."SPEED" + @main_data.base_stat."Sp. DEF" +  @main_data.base_stat."Sp. ATK"  + @main_data.base_stat."DEF" + @main_data.base_stat."ATK" +  @main_data.base_stat."HP")
-          %> </td>
-      </tr>
-      </tbody>
-    </table>
-    </div>
-
+  </div>
 </div>
 
+
+<div style="font-size:25px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
+  <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> EV Values</label>
+    <div class="container" style="display:grid;grid-template-columns: repeat(7, 170px);background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
+
+    <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
+        <div class="column" style="text-indent:10px"><%= @main_data.hp %>
+  <div> <%= @main_data.ev."HP" %> <br> HP </div>
+  <div> <span style="text-align:center"> <%= @main_data.base_stat."ATK" %>  </span> <br> Attack</div>
+  <div> <%= @main_data.ev."DEF" %> <br> Defense</div>
+  <div> <%= @main_data.ev."Sp. ATK"%> <br> Special <br> Attack </div>
+  <div> <%= @main_data.ev."Sp. DEF" %> <br> Special <br> Defense </div>
+  <div> <%= @main_data.ev."SPEED" %> <br> Speed </div>
+  <div> <%= @main_data.ev."HP" + @main_data.ev."ATK" + @main_data.ev."DEF"
+  +  @main_data.ev."Sp. ATK" + @main_data.ev."Sp. DEF" + @main_data.ev."SPEED"
+   %> <br> Total</div>
+  </div>
+</div>
 
 
   <div style="background-color:#eff0f3;padding-top:20px;margin-top:20px;width:1140px">
@@ -347,6 +334,10 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
          <td> <div class="<%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %>" style="color:white;width:130px;height:50x;text-align:center"> <%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %> </div></td>
          <td style=";text-indent:0"> <%= Repo.all(from p in MoveList, select: p.forc, where: ( p.internal_name == ^move.name ) ) %> </td>
          <td style=";text-indent:0"> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name  ) %> </td>
+        <% else %>
+        <td> --- </td>
+        <td> Special </td>
+        <td> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name, limit: 1  ) %> </td>
         <% end %>
       </tr>
       <% end %>
@@ -354,52 +345,3 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
     </table>
 
   </div>
-
-<div class="container" style="width:70%;float:left;margin-top:20px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
-  <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> EVs </label>
-  <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
-      <div class="column" style="text-indent:10px"><%= @main_data.hp %>
-    <div>
-    <table style="width:100%;padding:20px">
-      <thead>
-        <tr style="pointer-events:none">
-         <th style="text-indent:8px">Stat</th>
-          <th >Value</th>
-        </tr>
-      </thead>
-      <tbody>
-
-      <tr class="tetable">
-      <tr class="tetable">
-      <td> Health </td>
-       <td> <%= @main_data.ev."HP" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Attack </td>
-       <td> <%= @main_data.ev."ATK" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Defense </td>
-       <td> <%= @main_data.ev."DEF" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Special Attack </td>
-       <td> <%= @main_data.ev."Sp. ATK" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Special Defense </td>
-       <td> <%= @main_data.ev."Sp. DEF" %> </td>
-      </tr>
-      <tr class="tetable">
-      <td> Speed </td>
-       <td> <%= @main_data.ev."SPEED" %> </td>
-      </tr>
-
-        <tr class="tetable">
-      <td> Total BST </td>
-       <td> <%= (@main_data.ev."SPEED" + @main_data.ev."Sp. DEF" +  @main_data.ev."Sp. ATK"  + @main_data.ev."DEF" + @main_data.ev."ATK" +  @main_data.ev."HP")
-          %> </td>
-      </tr>
-      </tbody>
-    </table>
-</div>
