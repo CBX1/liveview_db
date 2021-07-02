@@ -312,14 +312,16 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
   <div style="background-color:#eff0f3;padding-top:20px;margin-top:20px;width:1140px">
     <label style="font-size:30px;margin-left:20px;margin-bottom:20px;color:#0d0d0d;"> All Moves </label>
 
-      <table style="padding:20px">
+      <table style="padding:20px;">
       <thead>
         <tr>
-         <th style="text-align:center;">Level</th>
+         <th style="text-align:center;">Method</th>
           <th style="">Name</th>
           <th style=""> Type </th>
           <th style=""> Category </th>
-          <th style=""> Description
+          <th> Power </th>
+          <th> Accuracy </th>
+          <th style=""> Description </th>
 
 
         </tr>
@@ -328,16 +330,21 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
          <tr class="tetable">
       <%= for move <- @main_data.moves  do %>
 
-             <td style="text-indent:0" phx-click="moverr" phx-value-movedata="<%= move.name  %>" style="text-align:center"> <%= move.learn %> </td>
-         <td style="text-indent:0" phx-click="moverr" phx-value-movedata="<%= move.name %>" > <%= move.name %> </td>
+             <td style="font-size:20px;text-indent:0" phx-click="moverr" phx-value-movedata="<%= move.name  %>" > <%= move.learn %> </td>
+         <td style="font-size:20px;text-indent:0" phx-click="moverr" phx-value-movedata="<%= move.name %>" > <%= move.name %> </td>
          <%= if move.name != "Hidden Power" do %>
          <td> <div class="<%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %>" style="color:white;width:130px;height:50x;text-align:center"> <%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %> </div></td>
-         <td style=";text-indent:0"> <%= Repo.all(from p in MoveList, select: p.forc, where: ( p.internal_name == ^move.name ) ) %> </td>
-         <td style=";text-indent:0"> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name  ) %> </td>
+         <td style="font-size:20px;text-indent:0"> <%= Repo.all(from p in MoveList, select: p.forc, where: ( p.internal_name == ^move.name ) ) %> </td>
+                  <td style="font-size:20px"> <%= ( Repo.all(from p in MoveList, select: [:power], where: ( p.internal_name == ^move.name ) ) |> hd ).power %></td>
+         <td style="font-size:20px;text-indent:0"><%= ( Repo.all(from p in MoveList, select: [:acc], where: ( p.internal_name == ^move.name ) ) |> hd ).acc %> </td>
+         <td style="font-size:20px;text-indent:0"> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name  ) %> </td>
+
         <% else %>
-        <td> --- </td>
-        <td> Special </td>
-        <td> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name, limit: 1  ) %> </td>
+        <td style="font-size:20px"> --- </td>
+        <td style="font-size:20px"> Special </td>
+        <td> 55 </td>
+        <td> 100 </td>
+        <td style="font-size:20px"> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name, limit: 1  ) %> </td>
         <% end %>
       </tr>
       <% end %>
