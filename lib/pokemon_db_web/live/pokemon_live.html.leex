@@ -23,7 +23,7 @@
   <div style="background-color:#eff0f3;padding:20px">
 
      <%= if @locations != [nil] do %>
-     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Locations </label>
+     <label style="font-size:25px;margin-bottom:20px;color:#0d0d0d;"> Locations </label>
      <p style="margin-left:30px;font-size:20px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @locations do %>
       <%= if location == @locations |> List.last do %>
       <%= location %>
@@ -32,11 +32,11 @@
       <% end %>
        <% end %>
        <%= else %>
-       <label style="font-size:30px;color:#0d0d0d;"> Cannot be found in the wild </label>
+       <label style="font-size:25px;color:#0d0d0d;"> Cannot be found in the wild </label>
        <% end %>
      </div>
 <div  style="background-color:#eff0f3;padding-left:18px;margin-top: 20px;width:300px">
- <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Type Effectiveness  </label>
+ <label style="font-size:25px;margin-bottom:20px;color:#0d0d0d;"> Type Effectiveness  </label>
    <div style="display:grid;grid-template-columns: repeat(4, 60px);
 background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
       <div>
@@ -196,8 +196,8 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 
 
 
-    <div style="background-color:#eff0f3;padding:20px;margin-top:20px">
-      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Abilities </label>
+    <div  style="min-width:340px;background-color:#eff0f3;padding:20px;margin-top:20px">
+      <label style="font-size:25px;margin-bottom:20px;color:#0d0d0d;"> Abilities </label>
       <table style="width:100%;background-color:#eff0f3;padding:10px" >
         <thead>
           <tr style="pointer-events:none">
@@ -209,29 +209,29 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
           <%= for ability <- @main_data.regular_abilities do %>
             <tr class="tetable">
               <td phx-click="click_ability" phx-value-ability="<%= ability %>"> Regular</td>
-                <td ><%= ability %></td>
+                <td style="text-indent:0px" ><%= ability %></td>
             </tr>
           <% end %>
           <%= if @main_data.hidden_ability != nil do %>
           <tr class="tetable">
             <td> Hidden </td>
-            <td phx-click="click_ability" phx-value-ability="<%= @main_data.hidden_ability %>"> <%=  @main_data.hidden_ability  %> </td>
+            <td style="text-indent:0px" phx-click="click_ability" phx-value-ability="<%= @main_data.hidden_ability %>"> <%=  @main_data.hidden_ability  %> </td>
           </tr>
           <% end %>
         </tbody>
       </table>
     </div>
     <div style="margin-top:20px;background-color:#eff0f3;padding:20px">
-      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;margin-right:20px;"> Growth Rate </label>
-      <p style="text-indent:30px;font-size:30px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.growth_rate %> </p>
+      <label style="font-size:25px;margin-bottom:20px;color:#0d0d0d;margin-right:20px;"> Growth Rate </label>
+      <p style="text-indent:30px;font-size:25px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.growth_rate %> </p>
     </div>
 
-<div style="min-width:400px;margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
+<div style="min-width:340px;margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
 
  <%= if @main_data.evolution != nil do %>
 
-      <label style="font-size:30px;color:#0d0d0d;padding:15px"> Evolutions </label>
-      <table style="padding:20px;font-size:30px;">
+      <label style="font-size:25px;color:#0d0d0d;padding:15px"> Evolutions </label>
+      <table style="padding:20px;font-size:25px;">
         <thead>
           <tr style="pointer-events:none">
             <th style="text-indent:7px">Method</th>
@@ -249,14 +249,14 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
       </table>
 
   <%= else %>
-    <label style="font-size:30px;padding:10px"> <b>No Evolution</b> </label>
+    <label style="font-size:25px;padding:10px"> <b>No Evolution</b> </label>
   <%end %>
 
 </div>
 
   <div style="background-color:#eff0f3;padding:20px">
-     <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;"> Egg Groups </label>
-     <p style="margin-left:30px;font-size:30px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @main_data.egg_group do %>
+     <label style="font-size:25px;margin-bottom:20px;color:#0d0d0d;"> Egg Groups </label>
+     <p style="margin-left:30px;font-size:25px;margin-bottom:20px;color:#0d0d0d"> <%= for location <- @main_data.egg_group do %>
       <%= if location == @main_data.egg_group |> List.last do %>
       <%= location %>
       <%= else %>
@@ -267,13 +267,13 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 
 
 <div style="margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
-      <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d;padding-top:20px;padding-left:20px"> Pokedex Entry </label>
-      <p style="margin-left:30px;font-size:30px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.description %> </p>
+      <label style="font-size:25px;margin-bottom:20px;color:#0d0d0d;padding-top:20px;padding-left:20px"> Pokedex Entry </label>
+      <p style="margin-left:30px;font-size:25px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.description %> </p>
 
 </div>
 
 <div style="font-size:25px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-bottom:20px;min-width:1200px">
-  <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> Base Stats </label>
+  <label style="font-size:25px;margin-bottom:20px;color:#0d0d0d"> Base Stats </label>
     <div class="container" style="display:grid;grid-template-columns: repeat(7,170px);background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;">
 
     <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
@@ -293,13 +293,13 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 
 
 <div style="font-size:25px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;min-width:1200px">
-  <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> EV Values</label>
+  <label style="font-size:25px;margin-bottom:20px;color:#0d0d0d"> EV Values</label>
     <div class="container" style="display:grid;grid-template-columns: repeat(7, 170px);background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
 
     <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
         <div class="column" style="text-indent:10px"><%= @main_data.hp %>
   <div> <%= @main_data.ev."HP" %> <br> HP </div>
-  <div> <span style="text-align:center"> <%= @main_data.base_stat."ATK" %>  </span> <br> Attack</div>
+  <div> <span style="text-align:center"> <%= @main_data.ev."ATK" %>  </span> <br> Attack</div>
   <div> <%= @main_data.ev."DEF" %> <br> Defense</div>
   <div> <%= @main_data.ev."Sp. ATK"%> <br> Special <br> Attack </div>
   <div> <%= @main_data.ev."Sp. DEF" %> <br> Special <br> Defense </div>
@@ -312,7 +312,7 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 
 
   <div style="background-color:#eff0f3;padding-top:20px;margin-top:20px;width:1140px">
-    <label style="font-size:30px;margin-left:20px;margin-bottom:20px;color:#0d0d0d;"> All Moves </label>
+    <label style="font-size:25px;margin-left:20px;margin-bottom:20px;color:#0d0d0d;"> All Moves </label>
 
       <table style="padding:20px;">
       <thead>
