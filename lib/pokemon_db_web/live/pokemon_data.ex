@@ -14,7 +14,8 @@ defmodule PokemonDbWeb.PokemonLive do
     Move,
     BaseStat,
     PokemonForm,
-    MoveList
+    MoveList,
+    Ability
 
   }
   def mount(_params, _session, socket) do
