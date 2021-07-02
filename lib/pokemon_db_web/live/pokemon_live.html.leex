@@ -226,18 +226,19 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
       <p style="text-indent:30px;font-size:30px;margin-bottom:20px;color:#0d0d0d"> <%= @main_data.growth_rate %> </p>
     </div>
 
-<div style="margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
+<div style="min-width:400px;margin-top:20px;margin-bottom:20px;background-color:#eff0f3;padding:10px">
+
  <%= if @main_data.evolution != nil do %>
-    <div>
+
       <label style="font-size:30px;color:#0d0d0d;padding:15px"> Evolutions </label>
-      <table style="width:100%;padding:20px;font-size:30px">
+      <table style="padding:20px;font-size:30px;">
         <thead>
           <tr style="pointer-events:none">
             <th style="text-indent:7px">Method</th>
             <th style="text-align:center;text-indent:15px">Pokemon</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style="background-color:rgba(239, 240, 243, 1)">
           <%= for pokemon <- @main_data.evolution do %>
             <tr class="tetable"  phx-click="test", phx-value-pname="<%= Map.fetch(pokemon,(pokemon |> Map.keys |> tl |> hd)) |> elem(1) %>">
               <td> <%=  (pokemon |> Map.keys |> hd |> String.capitalize) <> " " <> (Map.fetch(pokemon,(Map.keys(pokemon) |> hd)) |> elem(1) |> String.capitalize)  %> </td>
@@ -246,10 +247,11 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
           <% end %>
         </tbody>
       </table>
-    </div>
+
   <%= else %>
     <label style="font-size:30px;padding:10px"> <b>No Evolution</b> </label>
   <%end %>
+
 </div>
 
   <div style="background-color:#eff0f3;padding:20px">
@@ -270,9 +272,9 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 
 </div>
 
-<div style="font-size:25px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-bottom:20px">
+<div style="font-size:25px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;margin-bottom:20px;min-width:1200px">
   <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> Base Stats </label>
-    <div class="container" style="display:grid;grid-template-columns: repeat(7, 170px);background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;width:100%">
+    <div class="container" style="display:grid;grid-template-columns: repeat(7,170px);background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;">
 
     <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
         <div class="column" style="text-indent:10px"><%= @main_data.hp %>
@@ -290,14 +292,14 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
 </div>
 
 
-<div style="font-size:25px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
+<div style="font-size:25px;background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;min-width:1200px">
   <label style="font-size:30px;margin-bottom:20px;color:#0d0d0d"> EV Values</label>
-    <div class="container" style="display:grid;grid-template-columns: repeat(7, 170px);background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px;width:100%">
+    <div class="container" style="display:grid;grid-template-columns: repeat(7, 170px);background-color:#eff0f3;padding-top:20px;padding-bottom:10px;padding-left:20px">
 
     <%# <div class="row" class="tetable" style="font-size:18px;border-bottom: 2px solid #0d0d0d;margin-bottom:5px">
         <div class="column" style="text-indent:10px"><%= @main_data.hp %>
   <div> <%= @main_data.ev."HP" %> <br> HP </div>
-  <div> <span style="text-align:center"> <%= @main_data.ev."ATK" %>  </span> <br> Attack</div>
+  <div> <span style="text-align:center"> <%= @main_data.base_stat."ATK" %>  </span> <br> Attack</div>
   <div> <%= @main_data.ev."DEF" %> <br> Defense</div>
   <div> <%= @main_data.ev."Sp. ATK"%> <br> Special <br> Attack </div>
   <div> <%= @main_data.ev."Sp. DEF" %> <br> Special <br> Defense </div>
@@ -327,10 +329,11 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
         </tr>
       </thead>
       <tbody>
-         <tr class="tetable">
-      <%= for move <- @main_data.moves  do %>
+         <%= for move <- @main_data.moves  do %>
+         <tr class ="tetable" >
 
-             <td style="font-size:20px;text-indent:0" phx-click="moverr" phx-value-movedata="<%= move.name  %>" > <%= move.learn %> </td>
+
+             <td style="font-size:20px;text-indent:0px;padding-left:20px" phx-click="moverr" phx-value-movedata="<%= move.name  %>" > <%= move.learn %> </td>
          <td style="font-size:20px;text-indent:0" phx-click="moverr" phx-value-movedata="<%= move.name %>" > <%= move.name %> </td>
          <%= if move.name != "Hidden Power" do %>
          <td> <div class="<%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %>" style="color:white;width:130px;height:50x;text-align:center"> <%= Repo.all(from p in MoveList, select: p.type, where: p.internal_name == ^move.name) %> </div></td>
@@ -345,8 +348,9 @@ background-color:#eff0f3;padding-left:20px;height:300px; margin-top: 20px;">
         <td> 55 </td>
         <td> 100 </td>
         <td style="font-size:20px"> <%= Repo.all(from p in MoveList, select: p.description, where: p.internal_name == ^move.name, limit: 1  ) %> </td>
+           </tr>
         <% end %>
-      </tr>
+
       <% end %>
       </tbody>
     </table>
