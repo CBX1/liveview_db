@@ -2,7 +2,7 @@
 <div>
 <%= f = form_for @pokemon_data, "#", [phx_change: :pokemon_new] %>
 <section>
-    <label for="nameField">Pokemon Empire PBS</label>
+    <label for="nameField">PBS</label>
     <%= text_input f, :name %>
     <div>
     <button type="button" phx-click="adv_search" phx-value-bool="<%= @expand %>"> Advanced Search </button>
