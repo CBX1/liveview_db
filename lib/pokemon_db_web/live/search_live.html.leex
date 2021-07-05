@@ -38,11 +38,40 @@
      </div>
 </section>
 <br style="clear:both;" />
-<div style="float:left;">
+<div style="float:left;margin-right:312px">
 <label> Enter Egg Group </label>
      <%= select f, :egg_group, @egg_group, prompt: "" %>
      </div>
+<label> Effort Points </label>
+<div style="display:grid;grid-template-columns: repeat(3, 150px)">
+
+<div>
+<label> HP
+<%= checkbox(f, :hp_ev) %>
+</div>
+<div>
+<label> ATK
+<%= checkbox(f, :atk_ev) %>
+</div>
+<div>
+<label> DEF
+<%= checkbox(f, :def_ev) %>
+</div>
+<div>
+<label> Sp. ATK
+<%= checkbox(f, :spa_ev) %>
+</div>
+<div>
+<label> Sp. DEF
+<%= checkbox(f, :spd_ev) %>
+</div>
+<div>
+<label> Speed
+<%= checkbox(f, :speed_ev) %>
+</div>
+</div>
 <% end %>
+
 <br style="clear:both;" />
 
 <button type="button" phx-click="reset"> Reset </button>

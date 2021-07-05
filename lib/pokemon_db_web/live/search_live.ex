@@ -68,7 +68,7 @@ defmodule PokemonDbWeb.SearchLive do
     #        |> assign(:pokemons, pokemons)
     # else
       IO.inspect params
-      set = from(p in Pokemon, as: :pkmn )
+      pokemons = from(p in Pokemon, as: :pkmn )
         |> set_q(params, "name")
         |> set_q(params, "egg_groups")
         |> set_q(params, "type1")
@@ -77,9 +77,17 @@ defmodule PokemonDbWeb.SearchLive do
         |> set_q(params, "ability")
         |> set_q(params, "moves")
         |> set_q(params, "location")
+        |> Repo.all
+      pokemons = pokemons
+                    |> filter_ev(params, "atk_ev")
+                    |> filter_ev(params, "def_ev")
+                    |> filter_ev(params, "hp_ev")
+                    |> filter_ev(params, "speed_ev")
+                    |> filter_ev(params, "spd_ev")
+                    |> filter_ev(params, "spa_ev")
         # mm = from(set in PokemonLocation)
         #       |> set_mm(set,params,"location")
-        pokemons = Repo.all(set)
+
         # IO.inspect pokemons
         socket =
             socket
@@ -90,8 +98,54 @@ defmodule PokemonDbWeb.SearchLive do
 end
 
 
+def filter_ev(list, params, check) do
 
+  cond do
+    check == "atk_ev" ->
+      if params["atk_ev"] == "true" && !is_nil(params["atk_ev"]) do
+       list |> Enum.filter(fn str -> str.ev."ATK" > 0 end)
+      else
+        list
+      end
+
+      check == "hp_ev" ->
+        if params["hp_ev"] == "true" && !is_nil(params["hp_ev"]) do
+         list |> Enum.filter(fn str -> str.ev."HP" > 0 end)
+        else
+          list
+        end
+
+        check == "def_ev" ->
+          if params["def_ev"] == "true" && !is_nil(params["def_ev"]) do
+           list |> Enum.filter(fn str -> str.ev."DEF" > 0 end)
+          else
+            list
+          end
+          check == "speed_ev" ->
+            if params["speed_ev"] == "true" && !is_nil(params["speed_ev"]) do
+             list |> Enum.filter(fn str -> str.ev."SPEED" > 0 end)
+            else
+              list
+            end
+            check == "spa_ev" ->
+              if params["spa_ev"] == "true" && !is_nil(params["spa_ev"]) do
+               list |> Enum.filter(fn str -> str.ev."Sp. ATK" > 0 end)
+              else
+                list
+              end
+
+              check == "spd_ev" ->
+                if params["spd_ev"] == "true" && !is_nil(params["spd_ev"]) do
+                 list |> Enum.filter(fn str -> str.ev."Sp. DEF" > 0 end)
+                else
+                  list
+                end
+
+    end
+
+end
 def set_q(query,params,check) do
+
   cond do
     check == "moves" ->
       if params["move"] != "" && !is_nil(params["move"]) do
