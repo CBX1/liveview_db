@@ -15,7 +15,7 @@ defmodule PokemonDbWeb.AbilityLive do
     |> String.replace("-", "")
     |> String.replace("'", "")
     |> String.upcase
-
+#f
     a = Repo.all(from m in Ability, where: m.name == ^params["ability"], select: m) |> hd
     IO.inspect a
     socket = socket |> assign(:main_data, a)
