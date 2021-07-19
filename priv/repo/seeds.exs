@@ -11,7 +11,7 @@
 # and so on) as they will fail if something goes wrong.
 PokemonDb.MoveData.read
 PokemonDb.Abil.read
-PokemonDb.Main.read
-PokemonDb.Location.read
-PokemonDb.C.read
-PokemonDb.Tno.read
+# PokemonDb.Main.read
+# PokemonDb.Location.read
+# PokemonDb.C.read
+# PokemonDb.Tno.read
