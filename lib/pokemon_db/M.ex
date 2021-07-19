@@ -219,9 +219,9 @@ defmodule PokemonDb.Main do
 
 
      tms = Tm.read
-     Enum.map(newmap, fn str -> parse(str,tms) end)
-    #    test1 =  newmap |> tl |> hd |> parse(tms)
-    #   test2 = newmap |> hd |> parse("tms")}
+      Enum.map(newmap, fn str -> parse(str,tms) end)
+        # test1 =  newmap |> tl |> hd |> parse(tms)
+        # test2 = newmap |> hd |> parse(tms)
 
 end
 def do_it(v) do
@@ -328,7 +328,6 @@ end
         egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
         unnatural_moves =  search_tm_list(internal_name, tm_list)
         natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves
-        natural_moves |> Enum.map(fn str -> add_Moves(str, pnum) end)
         {:ok, data} = Map.fetch(nparse, :newestdata)
 
 
@@ -342,6 +341,7 @@ end
                                 |> String.slice(8..String.length(pokedex_entry))
 
         [_,_ | last_data] = last_data
+        IO.inspect last_data
         {:ok, last_data} =Map.fetch( last_data
                                             |> item_rarity_Check(),
                                     :ndata)
@@ -536,7 +536,9 @@ end
           %{:egg_moves => nil , :newestdata => data}
       end
   end
-
+ def item_rarity_Check([]) do
+    %{:item => nil}
+ end
   def item_rarity_Check(data) do
       if data |> hd |> is_item() do
           %{:item => data |> hd |> String.split("=") |> tl |> hd, :ndata => data |> tl}
@@ -725,4 +727,39 @@ defmodule PokemonDb.Abil do
            changeset = Ability.changeset(%Ability{},data)
            Repo.insert(changeset, on_conflict: {:replace_all_except, [:id]}, conflict_target: :internal_name)
         end
+end
+
+defmodule PokemonDb.AddMoves do
+    alias PokemonDb.Pokemon
+    alias PokemonDb.MoveList
+    alias PokemonDb.Repo
+    import Ecto.Query
+
+    def read do
+       a = Repo.all(from m in Pokemon, select: [m.id, m.moves])
+       a |> Enum.map(fn str -> str |> der end)
+    # a |> hd |> der
+    end
+
+    def der(strr) do
+         a = strr |> tl |> hd
+         a |> Enum.map(fn str -> yerr(strr |> hd , str) end)
+    end
+
+    def yerr(num, str) do
+
+       v = Repo.all(from m in MoveList, where: ^str.name == m.internal_name) |> hd
+
+       if v != [] do
+        if v.moves == nil do
+            changeset = PokemonDb.MoveList.changeset(v, %{moves: [num]})
+            Repo.insert(changeset, on_conflict: [set: [moves: changeset.data.moves]], conflict_target: :name)
+        else
+       ff = v.moves ++ [num]
+        Enum.uniq(ff)
+        changeset = PokemonDb.MoveList.changeset(v, %{moves: ff})
+        Repo.insert(changeset, on_conflict: [set: [moves: changeset.data.moves]], conflict_target: :name)
+        end
+       end
+    end
 end
