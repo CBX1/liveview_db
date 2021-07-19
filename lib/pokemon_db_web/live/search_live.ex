@@ -28,7 +28,7 @@ defmodule PokemonDbWeb.SearchLive do
     o = from(g in subquery(qq), select: g.ability, order_by: g.ability)
     growth_rate = ["Fluctuating","Erratic","Slow","Fast","Medium","Parabolic"]
     location_query =  from n in Location, select: n.name, distinct: n.name, order_by: n.name
-    locations = ["All", "Polaris", "Calvera","Toliman"] ++ Repo.all(location_query)
+    locations = ["All"] ++ Repo.all(location_query)
     pokemons = Repo.all(vv)
     # Polaris, Calvera, All
     #ff
