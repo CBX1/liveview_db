@@ -220,8 +220,8 @@ defmodule PokemonDb.Main do
 
      tms = Tm.read
      Enum.map(newmap, fn str -> parse(str,tms) end)
-    #    test1 =  newmap |> tl |> hd |> parse(tms)
-    #   test2 = newmap |> hd |> parse("tms")}
+        # test1 =  newmap |> tl |> hd |> parse(tms)
+    #   test2 = newmap |> hd |> parse(tms)
 
 end
 def do_it(v) do
@@ -329,10 +329,11 @@ end
         unnatural_moves =  search_tm_list(internal_name, tm_list)
         natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves
         natural_moves |> Enum.map(fn str -> add_Moves(str, pnum) end)
+
         {:ok, data} = Map.fetch(nparse, :newestdata)
 
 
-        [egg_group,_,_,_,_,_,_| last_data] = data
+        [egg_group,_,_,_,_,_| last_data] = data
         egg_group = egg_group
                             |> String.slice(14..String.length(egg_group))
                             |> String.split(",")
