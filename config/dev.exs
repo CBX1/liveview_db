@@ -2,7 +2,7 @@ use Mix.Config
 
 # Configure your database
 config :pokemon_db, PokemonDb.Repo,
-  username: "cbx",
+  username: "postgres",
   password: "prince101",
   database: "pokemondb",
   hostname: "localhost",

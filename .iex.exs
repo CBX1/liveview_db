@@ -10,5 +10,6 @@ alias PokemonDb.{
   M,
   MoveData,
   CorrectSpelling,
-  Tm
+  Tm,
+  Abil
 }

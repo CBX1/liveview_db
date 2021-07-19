@@ -12,4 +12,6 @@
 PokemonDb.MoveData.read
 PokemonDb.Abil.read
 PokemonDb.Main.read
+PokemonDb.Location.read
+PokemonDb.C.read
 PokemonDb.Tno.read

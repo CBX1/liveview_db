@@ -8,7 +8,7 @@ defmodule PokemonDb.M do
   end
   def read do
       {:ok, contents} = File.read("assets/static/location.txt")
-      map = contents |> String.split("#-------------------------------") |> tl
+      map = contents |> String.split("#########################") |> tl
     Enum.map(map, fn string -> main(string) end)
   end
 
@@ -22,7 +22,7 @@ defmodule PokemonDb.M do
             encounterChance: encWhere(chance |> String.split(",")),
             encounterPresent: encPresent(pokemons |> Enum.map(fn string -> substrC(string) end))})
     if changeset.valid? do
-        case Repo.insert(changeset) do
+        case Repo.insert(changeset, on_conflict: [set: [encounterPresent: changeset.data.encounterPresent]], conflict_target: :name)        do
             {:ok, location} ->
                 IO.puts("Record for #{location.name} was created.")
                 changeset.data.name
@@ -70,34 +70,57 @@ end
   end
 
   def value_type?(value) do
-  value in ["Land", "FishingRod", "LandNight", "Cave"]
+  value in ["Land", "FishingRod", "LandNight", "Cave","Water","OldRod"]
   end
 end
 
-defmodule C do
+defmodule PokemonDb.C do
     alias PokemonDb.PokemonLocation
     alias PokemonDb.Repo
     alias PokemonDb.M
     alias PokemonDb.Main
     alias PokemonDb.Pokemon
+    alias PokemonDb.Location
     import Ecto.Query
 
     def onn do
         IO.puts "test"
       end
   def read do
+    M.read
       {:ok, contents} = File.read("assets/static/location.txt")
-      newnewmap = contents |> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") |> check end)
-      b = newnewmap |> Enum.map(fn string -> string |> comma_substr |> Enum.uniq end) |>  List.flatten() |> Enum.map(fn string -> {string, pres(string,newnewmap)} end) |> Enum.uniq()
+      newnewmap = contents |> String.split("#########################") |> tl |> Enum.map( fn string -> string |> String.split("\n") |> check end)
+       b = newnewmap |> Enum.map(fn string -> string |> comma_substr |> Enum.uniq end) |>  List.flatten() |> Enum.map(fn string -> {string, pres(string,newnewmap)} end) |> Enum.uniq()
       # Returns tuple in the form of {Name, [Location1,Location2,...]}
-      M.read
-      array_of_names = Main.read
-     {b |> hd |> addPok(array_of_names),b |> tl |> hd |> get_location}
-  d = Enum.map(b, fn string -> {addPok(string,array_of_names), get_location(string)} end)
-d |> Enum.map(fn s -> zipV(s |> elem(0), s |> elem(1)) end)
+      b |> Enum.map(fn str -> str |> ins end)
+    #  b |> Enum.map(fn str -> ins(b) end)
+#        array_of_names = Main.read
+#       {b |> hd |> addPok(array_of_names),b |> tl |> hd |> get_location}
+#    d = Enum.map(b, fn string -> {addPok(string,array_of_names), get_location(string)} end)
+# d |> Enum.map(fn s -> zipV(s |> elem(0), s |> elem(1)) end)
 
     end
+def ins(data) do
+create_tuples( Repo.one( from m in Pokemon, where: m.internal_name == ^(data |> elem(0)), select: m.p_num ), data |> elem(1))
+end
 
+def create_tuples(name, []) do
+    []
+end
+def create_tuples(name, locations) do
+ changeset =    PokemonLocation.changeset(%PokemonLocation{}, %{pokemon_id: name, location_id: Repo.one(from m in Location, where: m.name == ^(locations |> hd), select: m.id)})
+ if changeset.valid? do
+    case Repo.insert(changeset) do
+        {:ok, pokemon_location} -> IO.puts("Record for { #{pokemon_location.pokemon_id}, #{pokemon_location.location_id} } was created.")
+        {:error, changeset} -> IO.inspect(changeset.errors)
+    end
+else
+    IO.inspect(changeset.errors)
+end
+
+create_tuples(name, locations |> tl)
+
+end
     def zipV(z,[]) do
     end
 
@@ -158,11 +181,13 @@ d |> Enum.map(fn s -> zipV(s |> elem(0), s |> elem(1)) end)
   end
 
   def comma_substr(string) do
+    IO.inspect string
       string = tl(string)
       Enum.map(string, fn string -> substr(string) end )
   end
 
   def substr(string) do
+    IO.inspect string
       {a,_} = :binary.match(string, ",")
       String.slice(string, 0, a)
   end
@@ -172,7 +197,7 @@ d |> Enum.map(fn s -> zipV(s |> elem(0), s |> elem(1)) end)
   end
 
   def value_type?(value) do
-      value in ["Land", "FishingRod", "LandNight", "Cave"]
+      value in ["Land", "FishingRod", "LandNight", "Cave","Water","OldRod","GoodRod"]
   end
 
 end
@@ -190,16 +215,23 @@ defmodule PokemonDb.Main do
     import Ecto.Query
   def read do
       {:ok, contents} = File.read("assets/static/pokemon.txt")
-      newmap = contents|> String.split("#-------------------------------") |> tl |> Enum.map( fn string -> string |> String.split("\n") end )
-    tms = Tm.read
+      newmap = contents|> String.split("[") |> tl
+
+
+     tms = Tm.read
      Enum.map(newmap, fn str -> parse(str,tms) end)
     #    test1 =  newmap |> tl |> hd |> parse(tms)
     #   test2 = newmap |> hd |> parse("tms")}
 
 end
+def do_it(v) do
+    data = v |> String.split("\n") |> Enum.filter(fn str -> str != "" end)
+    ["[" <> (data |> hd) ] ++ (data |> tl)
+end
 
     def parse(da,tm_list) do #This is a really long function that just parses a given text blob of a Pokemon
-        data = Enum.filter(da, fn string -> string != "" end)
+        data = do_it(da)
+        IO.inspect data
         [pnum,pname,internal_name,ptype1,ptype2 | other_data] = data
 
         pnum = pnum
@@ -296,7 +328,7 @@ end
         egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
         unnatural_moves =  search_tm_list(internal_name, tm_list)
         natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves
-
+        natural_moves |> Enum.map(fn str -> add_Moves(str, pnum) end)
         {:ok, data} = Map.fetch(nparse, :newestdata)
 
 
@@ -434,7 +466,12 @@ end
 
   end
 
+  def check([]) do
+    []
+  end
   def check(ddd) do
+    IO.inspect ddd
+    IO.inspect "test"
       if form_name(ddd |> hd) == true do
           ddd |> tl
       else
@@ -522,7 +559,8 @@ defmodule PokemonDb.Tm do
 
     def read do
         {:ok, contents} = File.read("assets/static/tm.txt")
-        array_generalform = contents |> String.split("#================================================================") |> Enum.filter(fn str -> str != "" end)
+        array_generalform = contents |> String.split("#================================================================
+") |> Enum.filter(fn str -> str != "" end)
         [_,tm_list, _,hm_list, _, move_tutors | _] = array_generalform
         # IO.inspect tm_list
         # IO.inspect hm_list
@@ -547,7 +585,7 @@ defmodule PokemonDb.Tm do
                  [%{"Learns via TM": name, pokemon: content |> tl |> hd}]
                  ++ create_list(content |> tl |> tl,type)
             type =~ "hm" ->
-                c = content |> hd |> String.slice(2..(String.length(content |> hd) -2) )
+                c = content |> hd |> String.slice(1..(String.length(content |> hd) -2) )
                 IO.inspect c
                 name = Repo.all( from m in MoveList, where: m.name == ^c, select: m.internal_name) |> hd
                 [%{"Learns via HM": name, pokemon: content |> tl |> hd |> String.slice(1..(String.length(content |> tl |> hd)))}]
@@ -617,9 +655,6 @@ defmodule PokemonDb.MoveData do
         {:ok, contents} = File.read("assets/static/o.txt")
         c = contents |> String.split("\n")
           c |> Enum.map(fn str -> parse(str |> String.split("\"")) end)
-
-          Repo.insert(%MoveList{name: "FLY", internal_name: "Fly", description: "The user flies up into the sky and then strikes its target on the next turn.", type: "FLYING", forc: "PHYSICAL", power: 90, acc: 95, basepp: 24}, on_conflict: [set: [basepp: 24, acc: 95]], conflict_target: :name)
-          Repo.insert(%MoveList{name: "WATERFALL", internal_name: "Waterfall", description: "Waterfall deals damage and has a 20% chance of causing the target to flinch (if the target has not yet moved).", type: "WATER", forc: "PHYSICAL", power: 80, acc: 100, basepp: 24}, on_conflict: [set: [basepp: 24, acc: 100]], conflict_target: :name)
 
     end
     def parse([a,b]) do
