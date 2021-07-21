@@ -16,5 +16,6 @@ defmodule PokemonDb.PokemonLocation do
       |> validate_number(:pokemon_id, greater_than_or_equal_to: 1)
       |> validate_number(:location_id, greater_than_or_equal_to: 1)
       |> unique_constraint([:pokemon_id, :location_id])
+      |> foreign_key_constraint(:name)
   end
 end
