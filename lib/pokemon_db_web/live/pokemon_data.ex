@@ -50,9 +50,9 @@ end
 def typeAdvantage(type) do
     cond do
         type == "NORMAL" ->
-            fillinBlanks(%{FIGHTING: 2.0, PSYCHIC: 2.0, GHOST: 0, FAIRY: 0.5})
+            fillinBlanks(%{FIGHTING: 2.0, GHOST: 0})
         type == "FIRE" ->
-            fillinBlanks(%{FIRE: 0.5, WATER: 2.0, GRASS: 0.5, ICE: 0.5, GROUND: 2.0, BUG: 0.5, ROCK: 2.0, STEEL: 0.5})
+            fillinBlanks(%{FIRE: 0.5, WATER: 2.0, GRASS: 0.5, ICE: 0.5, GROUND: 2.0, BUG: 0.5, ROCK: 2.0, STEEL: 0.5, FAIRY: 0.5})
         type == "WATER" ->
             fillinBlanks(%{FIRE: 0.5, WATER: 0.5, GRASS: 2.0, ELECTRIC: 2.0, ICE: 0.5, STEEL: 0.5})
         type == "ELECTRIC" ->
@@ -60,7 +60,7 @@ def typeAdvantage(type) do
         type == "GRASS" ->
             fillinBlanks(%{FIRE: 2.0, WATER: 0.5, ELECTRIC: 0.5, GRASS: 0.5, ICE: 2.0, GROUND: 0.5, FLYING: 2.0, BUG: 2.0})
         type == "ICE" ->
-            fillinBlanks(%{FIRE: 2.0, WATER: 0.5, ICE: 0.5, FIGHTING: 2.0, ROCK: 2.0, STEEL: 2.0})
+            fillinBlanks(%{FIRE: 2.0, ICE: 0.5, FIGHTING: 2.0, ROCK: 2.0, STEEL: 2.0})
         type == "FIGHTING" ->
             fillinBlanks(%{FLYING: 2.0, PSYCHIC: 2.0, BUG: 0.5, ROCK: 0.5, DARK: 0.5, FAIRY: 2.0})
         type == "POISON" ->
@@ -76,7 +76,7 @@ def typeAdvantage(type) do
         type == "STEEL" ->
             fillinBlanks(%{NORMAL: 0.5, FIRE: 2.0, GRASS: 0.5, ICE: 0.5, FIGHTING: 2.0, POISON: 0, GROUND: 2.0, FLYING: 0.5, ROCK: 0.5, PSYCHIC: 0.5, BUG: 0.5, DRAGON: 0.5, STEEL: 0.5, FAIRY: 0.5})
         type == "FAIRY" ->
-            fillinBlanks(%{NORMAL: 2.0, FIGHTING: 0.5, POISON: 2.0, DRAGON: 0, DARK: 0.5, GHOST: 0.5, STEEL: 2.0})
+            fillinBlanks(%{FIGHTING: 0.5, POISON: 2.0, DRAGON: 0, DARK: 0.5, GHOST: 0.5, STEEL: 2.0})
         type == "GHOST" ->
             fillinBlanks(%{NORMAL: 0, FIGHTING: 0, POISON: 0.5, BUG: 0.5, GHOST: 2, DARK: 2})
         type == "ROCK" ->
