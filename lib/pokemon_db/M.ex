@@ -27,12 +27,12 @@ defmodule PokemonDb.M do
                 IO.puts("Record for #{location.name} was created.")
                 changeset.data.name
             {:error, changeset} ->
-                IO.inspect(changeset.errors)
+                 IO.inspect(changeset.errors)
                 changeset.data.name
         end
 
     else
-        IO.inspect(changeset.errors)
+        # IO.inspect(changeset.errors)
     end
 
 end
@@ -112,10 +112,10 @@ def create_tuples(name, locations) do
  if changeset.valid? do
     case Repo.insert(changeset) do
         {:ok, pokemon_location} -> IO.puts("Record for { #{pokemon_location.pokemon_id}, #{pokemon_location.location_id} } was created.")
-        {:error, changeset} -> IO.inspect(changeset.errors)
+         {:error, changeset} -> IO.inspect(changeset.errors)
     end
 else
-    IO.inspect(changeset.errors)
+    # IO.inspect(changeset.errors)
 end
 
 create_tuples(name, locations |> tl)
@@ -130,10 +130,10 @@ end
         if changeset.valid? do
             case Repo.insert(changeset) do
                 {:ok, pokemon_location} -> IO.puts("Record for { #{pokemon_location.pokemon_id}, #{pokemon_location.location_id} } was created.")
-                {:error, changeset} -> IO.inspect(changeset.errors)
+                 {:error, changeset} -> IO.inspect(changeset.errors)
             end
         else
-            IO.inspect(changeset.errors)
+             IO.inspect(changeset.errors)
         end
         zipV(z, list |> tl)
     end
@@ -181,13 +181,13 @@ end
   end
 
   def comma_substr(string) do
-    IO.inspect string
+    # IO.inspect string
       string = tl(string)
       Enum.map(string, fn string -> substr(string) end )
   end
 
   def substr(string) do
-    IO.inspect string
+    # IO.inspect string
       {a,_} = :binary.match(string, ",")
       String.slice(string, 0, a)
   end
@@ -278,7 +278,7 @@ end
           }
 
 
-       IO.inspect [hp, atk, def, speed, spa, spd]= effort_points
+      [hp, atk, def, speed, spa, spd]= effort_points
           |> String.slice(13..String.length(effort_points))
           |> String.split(",")
 
@@ -342,7 +342,7 @@ end
                                      |> String.slice(8..String.length(pokedex_entry))
 
         [_,_,_ | last_data] = last_data
-        IO.inspect last_data
+        # IO.inspect last_data
         {:ok, last_data} =Map.fetch( last_data
                                             |> item_rarity_Check(),
                                     :ndata)
@@ -354,7 +354,7 @@ end
                                             |> item_rarity_Check(),
                                     :ndata
                                     )
-        IO.inspect last_data
+        # IO.inspect last_data
 
         evolution = last_data
                             |> check
@@ -393,7 +393,7 @@ end
                         {changeset_pokemon.data.p_num,  internal_name}
                     # Tuple for many-many relation
                     {:error, changeset} ->
-                        IO.inspect(changeset.errors)
+                        # IO.inspect(changeset.errors)
                         {changeset_pokemon.data.p_num,  internal_name}
             end
         end
