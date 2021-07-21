@@ -109,10 +109,12 @@ def create_tuples(name, []) do
 end
 def create_tuples(name, locations) do
  changeset =    PokemonLocation.changeset(%PokemonLocation{}, %{pokemon_id: name, location_id: Repo.one(from m in Location, where: m.name == ^(locations |> hd), select: m.id)})
+ IO.inspect {name, locations}
  if changeset.valid? do
     case Repo.insert(changeset) do
         {:ok, pokemon_location} -> IO.puts("Record for { #{pokemon_location.pokemon_id}, #{pokemon_location.location_id} } was created.")
          {:error, changeset} -> IO.inspect(changeset.errors)
+
     end
 else
     # IO.inspect(changeset.errors)
@@ -612,10 +614,10 @@ alias PokemonDb.{
     Pokemon
 }
     def read do
-        a = Repo.all(from m in Pokemon, select: m)
+        a = Repo.all(from m in Pokemon, select: %{name: m.name, evolution: m.evolution})
 
-        # b = a |> Enum.map(fn str -> n(str) end)
-        a |> hd |> n
+        b = a |> Enum.map(fn str -> n(str) end)
+        # a |> hd |> n
         # b
     end
 
