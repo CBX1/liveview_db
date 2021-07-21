@@ -10,8 +10,13 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :pokemon_db, PokemonDbWeb.Endpoint,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: "desopbs.tk", port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  check_origin: [
+    "//desopbs.tk",
+    "//www.desopbs.tk",
+    "//twin-sour-bonobo.gigalixirapp.com//"
+  ]
 
 # Do not print debug messages in production
 config :logger, level: :info
