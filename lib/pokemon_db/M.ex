@@ -219,9 +219,9 @@ defmodule PokemonDb.Main do
 
 
      tms = Tm.read
-      Enum.map(newmap, fn str -> parse(str,tms) end)
-        # test1 =  newmap |> tl |> hd |> parse(tms)
-        # test2 = newmap |> hd |> parse(tms)
+       Enum.map(newmap, fn str -> parse(str,tms) end)
+        # { test1 =  newmap |> tl |> hd |> parse(tms),
+        #  test2 = newmap |> hd |> parse(tms) }
 
 end
 def do_it(v) do
@@ -231,7 +231,7 @@ end
 
     def parse(da,tm_list) do #This is a really long function that just parses a given text blob of a Pokemon
         data = do_it(da)
-        IO.inspect data
+        # IO.inspect data
         [pnum,pname,internal_name,ptype1,ptype2 | other_data] = data
 
         pnum = pnum
@@ -328,19 +328,20 @@ end
         egg_moves_schema = egg_moves_noschema |> parese(pnum, "Egg Move")
         unnatural_moves =  search_tm_list(internal_name, tm_list)
         natural_moves = all_moves ++ egg_moves_schema ++ unnatural_moves
+         natural_moves |> Enum.map(fn str -> add_Moves(str,pnum) end)
         {:ok, data} = Map.fetch(nparse, :newestdata)
 
 
-        [egg_group,_,_,_,_,_,_,_| last_data] = data
+          [egg_group,_,_,_,_,_| last_data] = data
         egg_group = egg_group
                             |> String.slice(14..String.length(egg_group))
                             |> String.split(",")
         pokedex_entry = last_data
-                             |> par
-        pokedex_entry = pokedex_entry
-                                |> String.slice(8..String.length(pokedex_entry))
+                                  |> par
+             pokedex_entry = pokedex_entry
+                                     |> String.slice(8..String.length(pokedex_entry))
 
-        [_,_ | last_data] = last_data
+        [_,_,_ | last_data] = last_data
         IO.inspect last_data
         {:ok, last_data} =Map.fetch( last_data
                                             |> item_rarity_Check(),
@@ -353,9 +354,11 @@ end
                                             |> item_rarity_Check(),
                                     :ndata
                                     )
-
+        IO.inspect last_data
 
         evolution = last_data
+                            |> check
+                            |> check
                             |> check
                             |> check
                             |> check
@@ -406,19 +409,14 @@ end
 
   def add_Moves(str, pnum) do
     {:ok, t} = Map.fetch(str, :name)
-    o = %PokemonDb.MoveList{name: t, moves: [pnum] }
-
-    v = MoveList.changeset(o)
-    case Repo.insert(v) do
-        {:ok, pokemon} -> str
-        {:error, changeset} ->
-
-            b= Repo.all(from i in MoveList, where: i.name == ^t, select: i)
-
-            c = MoveList.changeset(b |> hd, %{moves: Enum.uniq(( b |> hd ).moves  ++ [pnum])  })
-            Repo.update(c)
-            str
+    b = Repo.all(from i in MoveList, where: i.internal_name == ^t, select: i) |> hd
+    if is_nil(b.moves) do
+       b = MoveList.changeset(b, %{moves: [pnum]})
+        Repo.update(b)
+    else
+        Repo.update(MoveList.changeset(b, %{moves: Enum.uniq(b.moves  ++ [pnum])  }))
     end
+
   end
 
 
@@ -441,16 +439,16 @@ end
      {:ok, move_tutor_data} =tm_list |> Map.fetch(:move)
      move_tutor_list = move_tutor_data  |>  Enum.filter(fn str -> check_map(str,name) end)
 a = return_move_list(tms_list ++ hm_list ++ move_tutor_list)
-IO.inspect "test"
-    IO.inspect a
-IO.inspect "end"
+# IO.inspect "test"
+    # IO.inspect a
+# IO.inspect "end"
     a
 end
 
 
    def check_map(data, str) do
     {:ok, data_str} = Map.fetch(data,:pokemon)
-    IO.inspect str
+    # IO.inspect str
     data_str =~ str
 
   end
@@ -470,8 +468,8 @@ end
     []
   end
   def check(ddd) do
-    IO.inspect ddd
-    IO.inspect "test"
+    # IO.inspect ddd
+    # IO.inspect "test"
       if form_name(ddd |> hd) == true do
           ddd |> tl
       else
@@ -494,7 +492,7 @@ end
       []
   end
   def convert(d) do
-    IO.inspect d
+    #  IO.inspect d
       if d == [""] || d == nil || d == [] do
           nil
       else
@@ -510,7 +508,7 @@ end
   def parese(e,p_id,how_learn) do
     cond do
         how_learn =~ "Learns at Level" ->
-            IO.inspect e |> tl |> hd
+            # IO.inspect e |> tl |> hd
             b = Repo.all(from m in MoveList, select: m.internal_name, where: m.name == ^(e |> tl |> hd)) |> hd
             [%Move{name: b, learn: how_learn <> hd(e)}] ++ parese(e |> tl |> tl,p_id, how_learn)
         how_learn =~ "Egg Move" ->
@@ -581,21 +579,21 @@ defmodule PokemonDb.Tm do
         cond do
             type =~ "tm" ->
                 c = content |> hd |> String.slice(1..(String.length(content |> hd) -2) )
-                IO.inspect c
+                # IO.inspect c
                  name = Repo.all( from m in MoveList, where: m.name == ^c, select: m.internal_name) |> hd
                 # IO.inspect c
                  [%{"Learns via TM": name, pokemon: content |> tl |> hd}]
                  ++ create_list(content |> tl |> tl,type)
             type =~ "hm" ->
                 c = content |> hd |> String.slice(1..(String.length(content |> hd) -2) )
-                IO.inspect c
+                # IO.inspect c
                 name = Repo.all( from m in MoveList, where: m.name == ^c, select: m.internal_name) |> hd
                 [%{"Learns via HM": name, pokemon: content |> tl |> hd |> String.slice(1..(String.length(content |> tl |> hd)))}]
                 ++ create_list(content |> tl |> tl,type)
             type =~ "tutor" ->
                 c = content |> hd |> String.slice(1..(String.length(content |> hd) -2) )
-                IO.inspect c
-                IO.inspect c
+                # IO.inspect c
+                # IO.inspect c
                  name = Repo.all( from m in MoveList, where: m.name == ^c, select: m.internal_name) |> hd
                 [%{"Learns via Move Tutor": name, pokemon: content |> tl |> hd}]
                 ++ create_list(content |> tl |> tl,type)
@@ -616,7 +614,8 @@ alias PokemonDb.{
     def read do
         a = Repo.all(from m in Pokemon, select: m)
 
-        b = a |> Enum.map(fn str -> n(str) end)
+        # b = a |> Enum.map(fn str -> n(str) end)
+        a |> hd |> n
         # b
     end
 

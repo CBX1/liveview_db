@@ -13,3 +13,4 @@ alias PokemonDb.{
   Tm,
   Abil
 }
+import Ecto.Query

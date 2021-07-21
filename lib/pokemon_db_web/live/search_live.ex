@@ -149,7 +149,9 @@ def set_q(query,params,check) do
   cond do
     check == "moves" ->
       if params["move"] != "" && !is_nil(params["move"]) do
-        from(p in query, join: m in MoveList, on: fragment("? = ANY(m1.moves)",p.p_num), where: m.internal_name == ^params["move"])
+    a =  from(p in query, join: m in MoveList, on: fragment("? = ANY(m1.moves)",p.p_num), where: m.internal_name == ^params["move"])
+    IO.inspect a
+    a
       else
         query
       end

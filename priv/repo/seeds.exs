@@ -9,10 +9,9 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-# PokemonDb.MoveData.read
-# PokemonDb.Abil.read
-# PokemonDb.Main.read
-PokemonDb.AddMoves.read
-# PokemonDb.M.read
-# PokemonDb.C.read
-# PokemonDb.Tno.read
+PokemonDb.MoveData.read
+PokemonDb.Abil.read
+PokemonDb.Main.read
+PokemonDb.M.read
+PokemonDb.C.read
+PokemonDb.Tno.read
