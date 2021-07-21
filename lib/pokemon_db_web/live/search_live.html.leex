@@ -96,7 +96,7 @@
       <%= for pokemon <- @pokemons do %>
 
       <tr phx-click="test" phx-value-pname="<%= pokemon.internal_name  %>">
-        <td > 	<img loading="lazy" padding-bottom="30px" height="100px" src="/images/Battlers/<%= pokemon.id %>.png" alt="No Image Available" /></td> </td>
+        <td > 	<img loading="lazy" padding-bottom="30px" height="100px" src="/images/Battlers/<%= pokemon.p_num %>.png" alt="No Image Available" /></td> </td>
         <td style="font-size:25px"><%=  pokemon.name %></td>
         <td> <div class="<%= pokemon.type1 %> display_table_type" > <%= pokemon.type1 %>  </div></td>
         <td> <div class="<%= pokemon.type2 %> display_table_type"><%= pokemon.type2 %>  </div></td>
