@@ -18,7 +18,7 @@ defmodule PokemonDbWeb.SearchLive do
   @spec mount(any, any, Phoenix.LiveView.Socket.t()) :: {:ok, Phoenix.LiveView.Socket.t()}
   def mount(_params, _session, socket) do
     vv = from p in Pokemon,
-        select: %{type1: p.type1, type2: p.type2, id: p.id, internal_name: p.internal_name, name: p.name},
+        select: %{type1: p.type1, type2: p.type2, id: p.id, p_num: p.p_num, internal_name: p.internal_name, name: p.name},
         order_by: p.id, limit: 200
      egg_group = from p in Pokemon, select: fragment("unnest(egg_group)"), distinct: fragment("unnest(egg_group)")
     moves = from n in "move_list", select: n.internal_name, order_by: n.internal_name
@@ -213,7 +213,7 @@ end
     def handle_event("reset",_, socket) do
       changeset = PokemonForm.changeset(%PokemonForm{})
       vv = from p in Pokemon,
-      select: %{type1: p.type1, type2: p.type2, internal_name: p.internal_name, id: p.id, name: p.name},
+      select: %{type1: p.type1, type2: p.type2, internal_name: p.internal_name, p_id: p.id, name: p.name, p_num: p.p_num},
       order_by: p.id, limit: 200
       pokemons = Repo.all(vv)
       socket =
