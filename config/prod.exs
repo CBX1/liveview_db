@@ -15,8 +15,8 @@ config :pokemon_db, PokemonDbWeb.Endpoint,
   check_origin: [
     "//desopbs.tk",
     "//www.desopbs.tk",
-    "//desopbs.gigalixirapp.com/",
-    "//desopbs.tk.gigalixirapp.com/"
+    "//www.desopbs.tk.gigalixirdns.com/",
+    "//desopbs.tk.gigalixirdns.com/"
   ]
 
 # Do not print debug messages in production
