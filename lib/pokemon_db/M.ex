@@ -101,14 +101,15 @@ defmodule PokemonDb.C do
 
     end
 def ins(data) do
-create_tuples(Repo.one( from m in Pokemon, where: m.internal_name == ^(data |> elem(0)), select: m), data |> elem(1))
+create_tuples( Repo.one( from m in Pokemon, where: m.internal_name == ^(data |> elem(0)), select: m ), data |> elem(1))
 end
 
 def create_tuples(name, []) do
     []
 end
 def create_tuples(name, locations) do
- changeset =    PokemonLocation.changeset(%PokemonLocation{}, %{pokemon_id: name, location_id: Repo.one(from m in Location, where: m.name == ^(locations |> hd), select: m)})
+af = Repo.one(from m in Location, where: m.name == ^(locations |> hd))
+ changeset =    PokemonLocation.changeset(%PokemonLocation{}, %{pokemon_id: name.id, pokemon: name, location: af , location_id: af.id,  })
  IO.inspect {name, locations}
  IO.inspect {changeset}
 
