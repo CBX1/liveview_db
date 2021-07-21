@@ -114,7 +114,7 @@ def create_tuples(name, locations) do
     case Repo.insert(changeset) do
         {:ok, pokemon_location} -> IO.puts("Record for { #{pokemon_location.pokemon_id}, #{pokemon_location.location_id} } was created.")
          {:error, changeset} -> IO.inspect(changeset.errors)
-
+        _ -> IO.inspect Repo.insert(changeset)
     end
 else
     # IO.inspect(changeset.errors)
