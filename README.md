@@ -1,8 +1,6 @@
 # 
 
 
-Hosted on https://www.desopbs.tk/
-
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
